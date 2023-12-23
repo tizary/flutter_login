@@ -18,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: Header(pageTitle: 'Login'),
       body: Form(
           key: _formKey,
@@ -77,12 +78,8 @@ class _LoginPageState extends State<LoginPage> {
                                     user.password == password,
                               );
 
-                              if (user != null) {
-                                setState(() {
-                                  _loginError = false;
-                                });
-                                Navigator.pushNamed(context, 'user');
-                              }
+                                Navigator.pushNamed(context, 'user', arguments: user);
+
                             } catch (e) {
                               setState(() {
                                 _loginError = true;
@@ -106,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                       'Invalid email or password',
                       style: TextStyle(color: Colors.red, fontSize: 18),
                     ),
-                  )
+                  ),
               ],
             ),
           )),

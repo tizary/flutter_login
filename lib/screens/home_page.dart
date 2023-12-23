@@ -6,6 +6,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: Header(pageTitle: 'My App'),
         body: Center(
           child: Column(
@@ -44,7 +45,7 @@ class HomePage extends StatelessWidget {
                       'Register',
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     )),
-              )
+              ),
             ],
           ),
         ));

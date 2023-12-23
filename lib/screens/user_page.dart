@@ -6,9 +6,12 @@ class UserPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: Header(pageTitle: 'User'),
-        body: Container(
-            padding:
-                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-            child: Text('User info')));
+        backgroundColor: Color.fromARGB(255, 99, 149, 229),
+        body: Center(
+            child: Text('User info',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 44,
+                    fontWeight: FontWeight.bold))));
   }
 }
