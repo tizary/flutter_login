@@ -180,6 +180,12 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                               } else {
                                 addUser(userInfo.toJson());
                                 resetFields();
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  backgroundColor: Colors.green[400],
+                                  content:
+                                      const Text("Пользователь успешно добавлен!"),
+                                ));
                               }
                             },
                             child: const Text('Create')),
