@@ -12,8 +12,8 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Authorization', style: TextStyle(fontSize: 28)),
-              SizedBox(height: 36),
+              const Text('Authorization', style: TextStyle(fontSize: 28)),
+              const SizedBox(height: 36),
               Container(
                 width: 250,
                 height: 50,
@@ -25,12 +25,12 @@ class HomePage extends StatelessWidget {
                       backgroundColor:
                           MaterialStateProperty.all<Color>(Colors.blue),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Login',
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     )),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Container(
                 width: 250,
                 height: 50,
@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
                     style: ButtonStyle(
                         backgroundColor:
                             MaterialStateProperty.all<Color>(Colors.blue)),
-                    child: Text(
+                    child: const Text(
                       'Register',
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     )),

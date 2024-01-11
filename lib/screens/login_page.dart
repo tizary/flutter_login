@@ -16,6 +16,13 @@ class _LoginPageState extends State<LoginPage> {
   bool _loginError = false;
 
   @override
+  void initState() {
+    _emailController.text = '111@m.ru';
+    _passwordController.text = '123456';
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -78,8 +85,8 @@ class _LoginPageState extends State<LoginPage> {
                                     user.password == password,
                               );
 
-                                Navigator.pushNamed(context, 'user', arguments: user);
-
+                              Navigator.pushNamed(context, 'user',
+                                  arguments: user);
                             } catch (e) {
                               setState(() {
                                 _loginError = true;
