@@ -16,11 +16,12 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
   List<Map> users = [];
   String sex = 'male';
   bool isChecked = false;
+  late String notUpdatedEmail;
 
   final _emailController = TextEditingController();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
-  final TextEditingController _date = TextEditingController();
+  final _date = TextEditingController();
 
   @override
   void initState() {
@@ -34,10 +35,9 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
     });
   }
 
-  void updateUser(updatedUser) {
+  void updateUser(email, updatedUser) {
     setState(() {
-      int index = users
-          .indexWhere((element) => element['email'] == updatedUser['email']);
+      int index = users.indexWhere((element) => element['email'] == email);
       users[index] = updatedUser;
     });
   }
@@ -179,8 +179,6 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                                 print('error');
                               } else {
                                 addUser(userInfo.toJson());
-                                print(userInfo.toJson());
-                                print(users);
                                 resetFields();
                               }
                             },
@@ -205,7 +203,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                               await MongoDatabase.updateUser(
                                   email, userInfo.toJson());
 
-                              updateUser(userInfo.toJson());
+                              updateUser(notUpdatedEmail, userInfo.toJson());
                               resetFields();
                             },
                             child: const Text('Update')),
@@ -228,6 +226,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                     _lastNameController.text = item['lastName'];
                     _date.text = item['date'];
                     setState(() {
+                      notUpdatedEmail = item['email'];
                       sex = item['sex'];
                       isChecked = item['confirm'];
                     });
@@ -245,7 +244,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                 trailing: IconButton(
                   icon: const Icon(Icons.delete_forever),
                   onPressed: () async {
-                    final email = _emailController.text;
+                    final email = item['email'];
                     await MongoDatabase.deleteUser(email);
                     deleteUserByEmail(email);
                     resetFields();
