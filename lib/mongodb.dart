@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter_application_1/models/user_info.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 class MongoDatabase {
@@ -51,7 +50,6 @@ class MongoDatabase {
     var user = await infoUserCollection.findOne({'email': email});
     if (user != null) {
       var filter = {'email': email};
-      print(data);
       return await infoUserCollection.replaceOne(filter, data);
     }
     return null;

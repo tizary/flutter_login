@@ -20,12 +20,32 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
   final _emailController = TextEditingController();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
-  TextEditingController _date = TextEditingController();
+  final TextEditingController _date = TextEditingController();
 
   @override
   void initState() {
     getUsers();
     super.initState();
+  }
+
+  void addUser(user) {
+    setState(() {
+      users.add(user);
+    });
+  }
+
+  void updateUser(updatedUser) {
+    setState(() {
+      int index = users
+          .indexWhere((element) => element['email'] == updatedUser['email']);
+      users[index] = updatedUser;
+    });
+  }
+
+  void deleteUserByEmail(email) {
+    setState(() {
+      users.removeWhere((element) => element['email'] == email);
+    });
   }
 
   void resetFields() {
@@ -53,37 +73,37 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
       body: ListView(
         children: [
           Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Form(
                 child: Column(
                   children: [
                     TextFormField(
                       controller: _emailController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: OutlineInputBorder(), hintText: 'Email'),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     TextFormField(
                       controller: _firstNameController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: OutlineInputBorder(), hintText: 'Name'),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     TextFormField(
                       controller: _lastNameController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: OutlineInputBorder(), hintText: 'Last Name'),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     TextFormField(
                       controller: _date,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           prefixIcon: Icon(Icons.date_range),
                           border: OutlineInputBorder(),
                           hintText: 'Select date of birth'),
@@ -112,7 +132,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                             });
                           },
                         ),
-                        Text('male'),
+                        const Text('male'),
                         Radio(
                           value: "female",
                           groupValue: sex,
@@ -122,7 +142,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                             });
                           },
                         ),
-                        Text('female'),
+                        const Text('female'),
                       ],
                     ),
                     Row(
@@ -134,7 +154,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                                 isChecked = value!;
                               });
                             }),
-                        Text('Сonfirm'),
+                        const Text('Сonfirm'),
                       ],
                     ),
                     Row(
@@ -158,11 +178,14 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                               if (result == null) {
                                 print('error');
                               } else {
+                                addUser(userInfo.toJson());
+                                print(userInfo.toJson());
+                                print(users);
                                 resetFields();
                               }
                             },
-                            child: Text('Create')),
-                        SizedBox(
+                            child: const Text('Create')),
+                        const SizedBox(
                           width: 16,
                         ),
                         ElevatedButton(
@@ -181,111 +204,58 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                                   confirm: isChecked);
                               await MongoDatabase.updateUser(
                                   email, userInfo.toJson());
+
+                              updateUser(userInfo.toJson());
                               resetFields();
                             },
-                            child: Text('Update')),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        ElevatedButton(
-                            onPressed: () async {
-                              final email = _emailController.text;
-                              await MongoDatabase.deleteUser(email);
-                              resetFields();
-                            },
-                            child: Text('Delete')),
+                            child: const Text('Update')),
                       ],
                     ),
                   ],
                 ),
               )),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          ...users
-              .map((item) => UsersListWidget(
-                    emailUser: item['email'],
-                    nameUser: item['firstName'],
-                    lastNameUser: item['lastName'],
-                    dateUser: item['date'],
-                    sexUser: item['sex'],
-                    confirmUser: item['confirm'],
-                    emailController: _emailController,
-                    firstNameController: _firstNameController,
-                    lastNameController: _lastNameController,
-                    dateController: _date,
-                    sex: sex,
-                    isChecked: isChecked,
-                  ))
-              .toList(),
+          ...users.map((item) {
+            return Column(children: [
+              ListTile(
+                leading: IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () {
+                    _emailController.text = item['email'];
+                    _firstNameController.text = item['firstName'];
+                    _lastNameController.text = item['lastName'];
+                    _date.text = item['date'];
+                    setState(() {
+                      sex = item['sex'];
+                      isChecked = item['confirm'];
+                    });
+                  },
+                ),
+                title: Column(children: [
+                  Text(item['email']),
+                  Text(item['firstName']),
+                  Text(item['lastName']),
+                  Text(item['date']),
+                  Text(item['sex']),
+                  Text(item['confirm'] ? 'confirm' : 'not confirmed'),
+                  const Divider(),
+                ]),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete_forever),
+                  onPressed: () async {
+                    final email = _emailController.text;
+                    await MongoDatabase.deleteUser(email);
+                    deleteUserByEmail(email);
+                    resetFields();
+                  },
+                ),
+              ),
+            ]);
+          })
         ],
       ),
     );
-  }
-}
-
-class UsersListWidget extends StatefulWidget {
-  String emailUser;
-  String nameUser;
-  String lastNameUser;
-  String dateUser;
-  String sexUser;
-  bool confirmUser;
-  TextEditingController emailController;
-  TextEditingController firstNameController;
-  TextEditingController lastNameController;
-  TextEditingController dateController;
-  String sex;
-  bool isChecked;
-
-  UsersListWidget({
-    super.key,
-    required this.emailUser,
-    required this.nameUser,
-    required this.lastNameUser,
-    required this.dateUser,
-    required this.sexUser,
-    required this.confirmUser,
-    required this.emailController,
-    required this.firstNameController,
-    required this.lastNameController,
-    required this.dateController,
-    required this.sex,
-    required this.isChecked,
-  });
-
-  @override
-  State<UsersListWidget> createState() => _UsersListWidgetState();
-}
-
-class _UsersListWidgetState extends State<UsersListWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: [
-      ListTile(
-        title: Stack(
-          children: [
-            Column(children: [
-              Text(widget.emailUser),
-              Text(widget.nameUser),
-              Text(widget.lastNameUser),
-              Text(widget.dateUser),
-              Text(widget.sexUser),
-              Text(widget.confirmUser ? 'confirm' : 'not confirmed'),
-              Divider(),
-            ]),
-            IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () {
-                widget.emailController.text = widget.emailUser;
-                widget.firstNameController.text = widget.nameUser;
-                widget.lastNameController.text = widget.lastNameUser;
-                widget.dateController.text = widget.dateUser;
-              },
-            ),
-          ],
-        ),
-      ),
-    ]);
   }
 }
