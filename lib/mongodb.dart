@@ -57,4 +57,13 @@ class MongoDatabase {
     print('User with email ${data["email"]} already exists');
     return null;
   }
+
+  static loginUser(email, password) async {
+    var user = await usersCollection.findOne({'email': email});
+    if (user != null && user['password'] == password) {
+      return user;
+    } else {
+      return null;
+    }
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/mongodb.dart';
 import 'package:flutter_application_1/screens/header.dart';
 
 class LoginPage extends StatefulWidget {
@@ -17,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    _emailController.text = '111@m.ru';
+    _emailController.text = 'tor@test.com';
     _passwordController.text = '123456';
     super.initState();
   }
@@ -81,21 +82,21 @@ class _LoginPageState extends State<LoginPage> {
                     width: 200,
                     height: 50,
                     child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           final form = _formKey.currentState!;
                           final email = _emailController.text;
                           final password = _passwordController.text;
                           if (form.validate()) {
                             try {
-                              // final user = Config.users.firstWhere(
-                              //   (user) =>
-                              //       user.email == email &&
-                              //       user.password == password,
-                              // );
-
-                              // Navigator.pushNamed(context, 'user',
-                              //     arguments: user.toJson()['email']);
+                              final user = await MongoDatabase.loginUser(
+                                  email, password);
+                              Navigator.pushNamed(context, 'user',
+                                  arguments: user['userName']);
+                              setState(() {
+                                _loginError = false;
+                              });
                             } catch (e) {
+                              print(e);
                               setState(() {
                                 _loginError = true;
                               });
