@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BurgerMenu extends StatefulWidget {
-  const BurgerMenu({super.key});
+  String user;
+  BurgerMenu({Key? key, required this.user});
 
   @override
   State<BurgerMenu> createState() => _BurgerMenuState();
@@ -24,22 +25,23 @@ class _BurgerMenuState extends State<BurgerMenu> {
       'gallery_page',
       'address_page',
     ];
+    final userName = widget.user.split('@').first;
     return Drawer(
       child: ListView(
         children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(color: Colors.blue),
+          DrawerHeader(
+            decoration: const BoxDecoration(color: Colors.blue),
             child: Column(
               children: [
-                Icon(
+                const Icon(
                   Icons.account_circle_sharp,
                   size: 50,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Text('user name',
-                    style: TextStyle(color: Colors.white, fontSize: 20))
+                Text(userName,
+                    style: const TextStyle(color: Colors.white, fontSize: 20))
               ],
             ),
           ),
@@ -49,13 +51,13 @@ class _BurgerMenuState extends State<BurgerMenu> {
               ListTile(
                 title: Text(
                   elem,
-                  style: TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 20),
                 ),
                 onTap: () {
                   Navigator.pushNamed(context, path[index]);
                 },
               ),
-              Divider()
+              const Divider()
             ]);
           }),
         ],

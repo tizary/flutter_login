@@ -15,12 +15,13 @@ class _UserPageState extends State<UserPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userData = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
         appBar: Header(pageTitle: 'User'),
         backgroundColor: const Color.fromARGB(255, 99, 149, 229),
-        drawer: BurgerMenu(),
+        drawer: BurgerMenu(user: userData),
         body: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 image: DecorationImage(
               image: AssetImage('assets/images/bg.jpg'),
               fit: BoxFit.cover,
@@ -28,12 +29,13 @@ class _UserPageState extends State<UserPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _ProgressDownloadWidget(loading: _loading, progressValue: _progressValue),
+                _ProgressDownloadWidget(
+                    loading: _loading, progressValue: _progressValue),
                 Container(
-                    padding: EdgeInsets.only(top: 30),
+                    padding: const EdgeInsets.only(top: 30),
                     child: Column(
                       children: [
-                        Text(
+                        const Text(
                           'Tap "-" to decrement',
                           style: TextStyle(color: Colors.white),
                         ),
@@ -46,11 +48,11 @@ class _UserPageState extends State<UserPage> {
                                   _count -= 1;
                                 });
                               },
-                              icon: Icon(Icons.remove),
+                              icon: const Icon(Icons.remove),
                               color: Colors.white,
                             ),
                             Text('$_count',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white, fontSize: 24)),
                             IconButton(
                               onPressed: () {
@@ -58,12 +60,12 @@ class _UserPageState extends State<UserPage> {
                                   _count += 1;
                                 });
                               },
-                              icon: Icon(Icons.add),
+                              icon: const Icon(Icons.add),
                               color: Colors.white,
                             ),
                           ],
                         ),
-                        Text(
+                        const Text(
                           'Tap "+" to increment',
                           style: TextStyle(color: Colors.white),
                         ),
@@ -78,7 +80,7 @@ class _UserPageState extends State<UserPage> {
               _updateProgress();
             });
           },
-          child: Icon(Icons.cloud_download),
+          child: const Icon(Icons.cloud_download),
         ));
   }
 
@@ -104,7 +106,8 @@ class _ProgressDownloadWidget extends StatelessWidget {
     super.key,
     required bool loading,
     required double progressValue,
-  }) : _loading = loading, _progressValue = progressValue;
+  })  : _loading = loading,
+        _progressValue = progressValue;
 
   final bool _loading;
   final double _progressValue;
@@ -114,23 +117,20 @@ class _ProgressDownloadWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: _loading
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                  LinearProgressIndicator(
-                    value: _progressValue,
-                    backgroundColor: Colors.orange,
-                    color: Colors.yellow,
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    '${(_progressValue * 100).round()}%',
-                    style: TextStyle(
-                        fontSize: 18, color: Colors.white),
-                  ),
-                  SizedBox(height: 10),
-                ])
-          : Text('Press button to download',
+          ? Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              LinearProgressIndicator(
+                value: _progressValue,
+                backgroundColor: Colors.orange,
+                color: Colors.yellow,
+              ),
+              const SizedBox(height: 5),
+              Text(
+                '${(_progressValue * 100).round()}%',
+                style: const TextStyle(fontSize: 18, color: Colors.white),
+              ),
+              const SizedBox(height: 10),
+            ])
+          : const Text('Press button to download',
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,

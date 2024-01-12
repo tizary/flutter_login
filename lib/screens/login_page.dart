@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                               );
 
                               Navigator.pushNamed(context, 'user',
-                                  arguments: user);
+                                  arguments: user.toJson()['email']);
                             } catch (e) {
                               setState(() {
                                 _loginError = true;
