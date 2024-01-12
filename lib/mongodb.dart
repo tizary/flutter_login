@@ -13,24 +13,6 @@ class MongoDatabase {
     inspect(db);
     usersCollection = db.collection('users');
     infoUserCollection = db.collection('info');
-    // await collection.insertMany([
-    //   {
-    //     "email": "bul@test.com",
-    //     "user": "bul",
-    //   },
-    //   {
-    //     "email": "pol@test.com",
-    //     "user": "pol",
-    //   },
-    //   {
-    //     "email": "gul@test.com",
-    //     "user": "gul",
-    //   },
-    //   {
-    //     "email": "ver@test.com",
-    //     "user": "ver",
-    //   },
-    // ]);
   }
 
   static getUsersFromInfoUsers() async {
@@ -65,5 +47,14 @@ class MongoDatabase {
 
   static Future<List<Map>> getUsers() async {
     return await usersCollection.find().toList();
+  }
+
+  static registerUser(data) async {
+    var user = await usersCollection.findOne({'email': data['email']});
+    if (user == null) {
+      return await usersCollection.insertOne(data);
+    }
+    print('User with email ${data["email"]} already exists');
+    return null;
   }
 }

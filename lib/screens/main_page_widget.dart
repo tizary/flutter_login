@@ -52,7 +52,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
                       rows: users
                           .map((elem) => DataRow(cells: [
                                 DataCell(Text(elem['email'])),
-                                DataCell(Text(elem['user'])),
+                                DataCell(Text(elem['userName'])),
                               ]))
                           .toList(),
                     ),

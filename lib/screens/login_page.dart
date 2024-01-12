@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_application_1/config/users.dart';
 import 'package:flutter_application_1/screens/header.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -43,14 +43,22 @@ class _LoginPageState extends State<LoginPage> {
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16))),
                     validator: (value) {
-                      if (!(value?.contains('@') ?? false)) {
-                        return 'Enter a valid email';
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter email';
                       }
+
+                      const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                      final regExp = RegExp(pattern);
+
+                      if (!regExp.hasMatch(value)) {
+                        return 'Please enter a valid email';
+                      }
+
                       return null;
                     },
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Container(
                   width: 300,
                   child: TextFormField(
@@ -68,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Container(
                     width: 200,
                     height: 50,
@@ -79,34 +87,32 @@ class _LoginPageState extends State<LoginPage> {
                           final password = _passwordController.text;
                           if (form.validate()) {
                             try {
-                              final user = Config.users.firstWhere(
-                                (user) =>
-                                    user.email == email &&
-                                    user.password == password,
-                              );
+                              // final user = Config.users.firstWhere(
+                              //   (user) =>
+                              //       user.email == email &&
+                              //       user.password == password,
+                              // );
 
-                              Navigator.pushNamed(context, 'user',
-                                  arguments: user.toJson()['email']);
+                              // Navigator.pushNamed(context, 'user',
+                              //     arguments: user.toJson()['email']);
                             } catch (e) {
                               setState(() {
                                 _loginError = true;
                               });
                             }
-                          } else {
-                            print('Validation failed');
                           }
                         },
                         style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all<Color>(Colors.blue)),
-                        child: Text(
+                        child: const Text(
                           'Submit',
                           style: TextStyle(color: Colors.white, fontSize: 20),
                         ))),
                 if (_loginError)
                   Container(
-                    padding: EdgeInsets.only(top: 16),
-                    child: Text(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: const Text(
                       'Invalid email or password',
                       style: TextStyle(color: Colors.red, fontSize: 18),
                     ),
