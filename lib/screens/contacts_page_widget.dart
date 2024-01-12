@@ -176,7 +176,12 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                               var result = await MongoDatabase.insertUser(
                                   userInfo.toJson());
                               if (result == null) {
-                                print('error');
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  backgroundColor: Colors.red[400],
+                                  content: const Text(
+                                      "User with that email already exists!"),
+                                ));
                               } else {
                                 addUser(userInfo.toJson());
                                 resetFields();
@@ -184,7 +189,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                                     .showSnackBar(SnackBar(
                                   backgroundColor: Colors.green[400],
                                   content:
-                                      const Text("Пользователь успешно добавлен!"),
+                                      const Text("User successfully added!"),
                                 ));
                               }
                             },
