@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/components/modal_contacts_delete.dart';
 import 'package:flutter_application_1/models/user_info.dart';
 import 'package:flutter_application_1/screens/header.dart';
 import 'package:intl/intl.dart';
@@ -46,7 +47,9 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
     });
   }
 
-  void deleteUserByEmail(email) {
+  Future<void> deleteUserByEmail(email) async {
+    await MongoDatabase.deleteUser(email);
+    resetFields();
     setState(() {
       users.removeWhere((element) => element.email == email);
     });
@@ -67,13 +70,24 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
     setState(() {
       _isLoading = true;
     });
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
     List<Map<String, Object?>> usersDb =
         await MongoDatabase.getUsersFromInfoUsers();
     setState(() {
       users = usersDb.map((item) => UserInfo.fromMap(item)).toList();
       _isLoading = false;
     });
+  }
+
+  void _showModal(BuildContext context, Function onYesPressed) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ModalContactsDelete(
+          onYesPressed: onYesPressed,
+        ); // Используйте ваш класс модального окна
+      },
+    );
   }
 
   @override
@@ -286,9 +300,11 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                               icon: const Icon(Icons.delete_forever),
                               onPressed: () async {
                                 final email = item.email;
-                                await MongoDatabase.deleteUser(email);
-                                deleteUserByEmail(email);
-                                resetFields();
+                                _showModal(
+                                    context, () => deleteUserByEmail(email));
+                                // await MongoDatabase.deleteUser(email);
+                                // deleteUserByEmail(email);
+                                // resetFields();
                               },
                             ),
                           ),

@@ -8,70 +8,27 @@ class GalleryPageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(pageTitle: 'Gallery'),
-      body: ListView(
-        shrinkWrap: true,
-        children: [
-          Column(children: [
-            Text('data'),
-            Text('data'),
-            Text('data'),
-            Text('data'),
-            Text('data'),
-            Text('data'),
-            Text('data'),
-            Text('data'),
-          ]),
-          Column(children: [
-            ListTile(
-              title: Column(children: [
-                Text('1'),
-                Text('2'),
-                Text('3'),
-                Text('4'),
-              ]),
-            ),
-            ListTile(
-              title: Column(children: [
-                Text('1'),
-                Text('2'),
-                Text('3'),
-                Text('4'),
-              ]),
-            ),
-            ListTile(
-              title: Column(children: [
-                Text('1'),
-                Text('2'),
-                Text('3'),
-                Text('4'),
-              ]),
-            ),
-            ListTile(
-              title: Column(children: [
-                Text('1'),
-                Text('2'),
-                Text('3'),
-                Text('4'),
-              ]),
-            ),
-            ListTile(
-              title: Column(children: [
-                Text('1'),
-                Text('2'),
-                Text('3'),
-                Text('4'),
-              ]),
-            ),
-            ListTile(
-              title: Column(children: [
-                Text('1'),
-                Text('2'),
-                Text('3'),
-                Text('4'),
-              ]),
-            ),
-          ]),
-        ],
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: ListView.builder(
+          itemCount: 10,
+          itemBuilder: (BuildContext context, int index) {
+            return Column(
+              children: [
+                SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: Container(
+                    color: Colors.red[400],
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                )
+              ],
+            );
+          },
+        ),
       ),
     );
   }
