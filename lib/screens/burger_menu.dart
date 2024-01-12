@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BurgerMenu extends StatefulWidget {
-  String user;
+  final String user;
   BurgerMenu({Key? key, required this.user});
 
   @override

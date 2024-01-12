@@ -13,10 +13,12 @@ class ContactsPageWidget extends StatefulWidget {
 }
 
 class _ContactsPageWidgetState extends State<ContactsPageWidget> {
-  List<Map> users = [];
+  final _formKey = GlobalKey<FormState>();
+  bool _isLoading = true;
+  List<UserInfo> users = [];
   String sex = 'male';
   bool isChecked = false;
-  late String notUpdatedEmail;
+  String? notUpdatedEmail;
 
   final _emailController = TextEditingController();
   final _firstNameController = TextEditingController();
@@ -31,20 +33,22 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
 
   void addUser(user) {
     setState(() {
-      users.add(user);
+      users.add(UserInfo.fromMap(user));
     });
   }
 
   void updateUser(email, updatedUser) {
     setState(() {
-      int index = users.indexWhere((element) => element['email'] == email);
-      users[index] = updatedUser;
+      int index = users.indexWhere((element) => element.email == email);
+      if (index != -1) {
+        users[index] = UserInfo.fromMap(updatedUser);
+      }
     });
   }
 
   void deleteUserByEmail(email) {
     setState(() {
-      users.removeWhere((element) => element['email'] == email);
+      users.removeWhere((element) => element.email == email);
     });
   }
 
@@ -60,9 +64,15 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
   }
 
   Future getUsers() async {
-    var usersDb = await MongoDatabase.getUsersFromInfoUsers();
     setState(() {
-      users = usersDb;
+      _isLoading = true;
+    });
+    await Future.delayed(const Duration(seconds: 2));
+    List<Map<String, Object?>> usersDb =
+        await MongoDatabase.getUsersFromInfoUsers();
+    setState(() {
+      users = usersDb.map((item) => UserInfo.fromMap(item)).toList();
+      _isLoading = false;
     });
   }
 
@@ -75,12 +85,19 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
           Padding(
               padding: const EdgeInsets.all(20),
               child: Form(
+                key: _formKey,
                 child: Column(
                   children: [
                     TextFormField(
                       controller: _emailController,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(), hintText: 'Email'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'This field is required';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(
                       height: 16,
@@ -161,36 +178,39 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                       children: [
                         ElevatedButton(
                             onPressed: () async {
-                              final email = _emailController.text;
-                              final name = _firstNameController.text;
-                              final lastName = _lastNameController.text;
-                              final date = _date.text;
+                              if (_formKey.currentState!.validate()) {
+                                final email = _emailController.text;
+                                final name = _firstNameController.text;
+                                final lastName = _lastNameController.text;
+                                final date = _date.text;
 
-                              UserInfo userInfo = UserInfo(
-                                  email: email,
-                                  firstName: name,
-                                  lastName: lastName,
-                                  date: date,
-                                  sex: sex,
-                                  confirm: isChecked);
-                              var result = await MongoDatabase.insertUser(
-                                  userInfo.toJson());
-                              if (result == null) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  backgroundColor: Colors.red[400],
-                                  content: const Text(
-                                      "User with that email already exists!"),
-                                ));
-                              } else {
-                                addUser(userInfo.toJson());
-                                resetFields();
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  backgroundColor: Colors.green[400],
-                                  content:
-                                      const Text("User successfully added!"),
-                                ));
+                                UserInfo userInfo = UserInfo(
+                                    email: email,
+                                    firstName: name,
+                                    lastName: lastName,
+                                    date: date,
+                                    sex: sex,
+                                    confirm: isChecked);
+
+                                var result = await MongoDatabase.insertUser(
+                                    userInfo.toJson());
+                                if (result == null) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    backgroundColor: Colors.red[400],
+                                    content: const Text(
+                                        "User with that email already exists!"),
+                                  ));
+                                } else {
+                                  addUser(userInfo.toJson());
+                                  resetFields();
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    backgroundColor: Colors.green[400],
+                                    content:
+                                        const Text("User successfully added!"),
+                                  ));
+                                }
                               }
                             },
                             child: const Text('Create')),
@@ -199,23 +219,27 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                         ),
                         ElevatedButton(
                             onPressed: () async {
-                              final email = _emailController.text;
-                              final name = _firstNameController.text;
-                              final lastName = _lastNameController.text;
-                              final date = _date.text;
+                              if (_formKey.currentState!.validate()) {
+                                final email = _emailController.text;
+                                final name = _firstNameController.text;
+                                final lastName = _lastNameController.text;
+                                final date = _date.text;
 
-                              UserInfo userInfo = UserInfo(
-                                  email: email,
-                                  firstName: name,
-                                  lastName: lastName,
-                                  date: date,
-                                  sex: sex,
-                                  confirm: isChecked);
-                              await MongoDatabase.updateUser(
-                                  email, userInfo.toJson());
-
-                              updateUser(notUpdatedEmail, userInfo.toJson());
-                              resetFields();
+                                UserInfo userInfo = UserInfo(
+                                    email: email,
+                                    firstName: name,
+                                    lastName: lastName,
+                                    date: date,
+                                    sex: sex,
+                                    confirm: isChecked);
+                                await MongoDatabase.updateUser(
+                                    email, userInfo.toJson());
+                                if (notUpdatedEmail != null) {
+                                  updateUser(
+                                      notUpdatedEmail, userInfo.toJson());
+                                  resetFields();
+                                }
+                              }
                             },
                             child: const Text('Update')),
                       ],
@@ -226,44 +250,51 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
           const SizedBox(
             height: 20,
           ),
-          ...users.map((item) {
-            return Column(children: [
-              ListTile(
-                leading: IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () {
-                    _emailController.text = item['email'];
-                    _firstNameController.text = item['firstName'];
-                    _lastNameController.text = item['lastName'];
-                    _date.text = item['date'];
-                    setState(() {
-                      notUpdatedEmail = item['email'];
-                      sex = item['sex'];
-                      isChecked = item['confirm'];
-                    });
-                  },
+          _isLoading
+              ? SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: Center(child: CircularProgressIndicator()))
+              : Column(
+                  children: [
+                    ...users.map((item) => Column(children: [
+                          ListTile(
+                            leading: IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed: () {
+                                _emailController.text = item.email;
+                                _firstNameController.text = item.firstName;
+                                _lastNameController.text = item.lastName;
+                                _date.text = item.date;
+                                setState(() {
+                                  notUpdatedEmail = item.email;
+                                  sex = item.sex;
+                                  isChecked = item.confirm;
+                                });
+                              },
+                            ),
+                            title: Column(children: [
+                              Text(item.email),
+                              Text(item.firstName),
+                              Text(item.lastName),
+                              Text(item.date),
+                              Text(item.sex),
+                              Text(item.confirm ? 'confirm' : 'not confirmed'),
+                              const Divider(),
+                            ]),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete_forever),
+                              onPressed: () async {
+                                final email = item.email;
+                                await MongoDatabase.deleteUser(email);
+                                deleteUserByEmail(email);
+                                resetFields();
+                              },
+                            ),
+                          ),
+                        ])),
+                  ],
                 ),
-                title: Column(children: [
-                  Text(item['email']),
-                  Text(item['firstName']),
-                  Text(item['lastName']),
-                  Text(item['date']),
-                  Text(item['sex']),
-                  Text(item['confirm'] ? 'confirm' : 'not confirmed'),
-                  const Divider(),
-                ]),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete_forever),
-                  onPressed: () async {
-                    final email = item['email'];
-                    await MongoDatabase.deleteUser(email);
-                    deleteUserByEmail(email);
-                    resetFields();
-                  },
-                ),
-              ),
-            ]);
-          })
         ],
       ),
     );

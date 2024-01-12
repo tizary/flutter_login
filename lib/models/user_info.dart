@@ -22,4 +22,15 @@ class UserInfo {
         'sex': sex,
         'confirm': confirm
       };
+
+  factory UserInfo.fromMap(Map<String, Object?> userMap) {
+    return UserInfo(
+      email: userMap['email'] as String,
+      firstName: userMap['firstName'] as String,
+      lastName: userMap['lastName'] as String,
+      date: userMap['date'] as String,
+      sex: userMap['sex'] as String,
+      confirm: userMap['confirm'] as bool,
+    );
+  }
 }
