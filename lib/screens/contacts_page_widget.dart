@@ -27,7 +27,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
 
   List<String> _selectedInterests = [];
 
-  List<String> _interestsList = [
+  final List<String> _interestsList = [
     'Reading',
     'Traveling',
     'Photography',
@@ -126,8 +126,16 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                           border: OutlineInputBorder(), hintText: 'Email'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'This field is required';
+                          return 'Please enter email';
                         }
+
+                        const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                        final regExp = RegExp(pattern);
+
+                        if (!regExp.hasMatch(value)) {
+                          return 'Please enter a valid email';
+                        }
+
                         return null;
                       },
                     ),
@@ -138,6 +146,12 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                       controller: _firstNameController,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(), hintText: 'Name'),
+                      validator: (value) {
+                        if (value == null || value.length < 3) {
+                          return 'Enter 3 or more letters';
+                        }
+                        return null;
+                      },
                     ),
                     // const SizedBox(
                     //   height: 16,
