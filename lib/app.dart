@@ -21,10 +21,17 @@ class App extends StatelessWidget {
           appBarTheme: const AppBarTheme(
             iconTheme: IconThemeData(color: Colors.white),
           ),
+          buttonTheme: const ButtonThemeData(buttonColor: Colors.blue),
+          elevatedButtonTheme: const ElevatedButtonThemeData(
+            style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(Colors.blue),
+              foregroundColor: MaterialStatePropertyAll(Colors.white),
+            ),
+          ),
         ),
         routes: {
-          'login': (context) => LoginPage(),
-          'register': (context) => RegisterPage(),
+          'login': (context) => const LoginPage(),
+          'register': (context) => const RegisterPage(),
           'user': (context) => UserPage(),
           'main_page': (context) => const MainPageWidget(),
           'contacts_page': (context) => const ContactsPageWidget(),

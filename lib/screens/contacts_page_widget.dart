@@ -17,6 +17,7 @@ class ContactsPageWidget extends StatefulWidget {
 class _ContactsPageWidgetState extends State<ContactsPageWidget> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = true;
+  bool _activatedEdit = false;
   List<UserInfo> users = [];
   String sex = 'male';
   bool isChecked = false;
@@ -252,72 +253,84 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                     ),
                     Row(
                       children: [
-                        ElevatedButton(
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                final email = _emailController.text;
-                                final name = _firstNameController.text;
-                                final lastName = _lastNameController.text;
-                                final date = _date.text;
+                        Container(
+                          width: 130,
+                          height: 50,
+                          child: ElevatedButton(
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  final email = _emailController.text;
+                                  final name = _firstNameController.text;
+                                  final lastName = _lastNameController.text;
+                                  final date = _date.text;
 
-                                UserInfo userInfo = UserInfo(
-                                    email: email,
-                                    firstName: name,
-                                    lastName: lastName,
-                                    date: date,
-                                    sex: sex,
-                                    confirm: isChecked);
+                                  UserInfo userInfo = UserInfo(
+                                      email: email,
+                                      firstName: name,
+                                      lastName: lastName,
+                                      date: date,
+                                      sex: sex,
+                                      confirm: isChecked);
 
-                                var result = await MongoDatabase.insertUser(
-                                    userInfo.toJson());
-                                if (result == null) {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                    backgroundColor: Colors.red[400],
-                                    content: const Text(
-                                        "User with that email already exists!"),
-                                  ));
-                                } else {
-                                  addUser(userInfo.toJson());
-                                  resetFields();
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                    backgroundColor: Colors.green[400],
-                                    content:
-                                        const Text("User successfully added!"),
-                                  ));
+                                  var result = await MongoDatabase.insertUser(
+                                      userInfo.toJson());
+                                  if (result == null) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.red[400],
+                                      content: const Text(
+                                          "User with that email already exists!"),
+                                    ));
+                                  } else {
+                                    addUser(userInfo.toJson());
+                                    resetFields();
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.green[400],
+                                      content: const Text(
+                                          "User successfully added!"),
+                                    ));
+                                  }
                                 }
-                              }
-                            },
-                            child: const Text('Create')),
+                              },
+                              child: const Text('Create')),
+                        ),
                         const SizedBox(
                           width: 16,
                         ),
-                        ElevatedButton(
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                final email = _emailController.text;
-                                final name = _firstNameController.text;
-                                final lastName = _lastNameController.text;
-                                final date = _date.text;
+                        if (_activatedEdit)
+                          Container(
+                            width: 130,
+                            height: 50,
+                            child: ElevatedButton(
+                                onPressed: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    final email = _emailController.text;
+                                    final name = _firstNameController.text;
+                                    final lastName = _lastNameController.text;
+                                    final date = _date.text;
 
-                                UserInfo userInfo = UserInfo(
-                                    email: email,
-                                    firstName: name,
-                                    lastName: lastName,
-                                    date: date,
-                                    sex: sex,
-                                    confirm: isChecked);
-                                await MongoDatabase.updateUser(
-                                    email, userInfo.toJson());
-                                if (notUpdatedEmail != null) {
-                                  updateUser(
-                                      notUpdatedEmail, userInfo.toJson());
-                                  resetFields();
-                                }
-                              }
-                            },
-                            child: const Text('Update')),
+                                    UserInfo userInfo = UserInfo(
+                                        email: email,
+                                        firstName: name,
+                                        lastName: lastName,
+                                        date: date,
+                                        sex: sex,
+                                        confirm: isChecked);
+                                    await MongoDatabase.updateUser(
+                                        email, userInfo.toJson());
+                                    if (notUpdatedEmail != null) {
+                                      updateUser(
+                                          notUpdatedEmail, userInfo.toJson());
+                                      resetFields();
+                                      setState(() {
+                                        _activatedEdit = false;
+                                      });
+                                    }
+                                  }
+                                },
+                                child: const Text('Update')),
+                          ),
                       ],
                     ),
                   ],
@@ -346,6 +359,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                                   notUpdatedEmail = item.email;
                                   sex = item.sex;
                                   isChecked = item.confirm;
+                                  _activatedEdit = true;
                                 });
                               },
                             ),

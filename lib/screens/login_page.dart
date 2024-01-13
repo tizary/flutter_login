@@ -103,12 +103,9 @@ class _LoginPageState extends State<LoginPage> {
                             }
                           }
                         },
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all<Color>(Colors.blue)),
                         child: const Text(
                           'Submit',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+                          style: TextStyle(fontSize: 20),
                         ))),
                 if (_loginError)
                   Container(

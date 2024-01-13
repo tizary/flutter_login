@@ -176,14 +176,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                 }
                               }
                             },
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.blue)),
                             child: const Text(
                               'Submit',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
+                              style: TextStyle(fontSize: 20),
                             ))),
                   ],
                 ),

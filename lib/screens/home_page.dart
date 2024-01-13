@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/screens/header.dart';
 
 class HomePage extends StatelessWidget {
@@ -21,13 +20,9 @@ class HomePage extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamed(context, 'login');
                     },
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue),
-                    ),
                     child: const Text(
                       'Login',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: TextStyle(fontSize: 20),
                     )),
               ),
               const SizedBox(height: 16),
@@ -38,12 +33,9 @@ class HomePage extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamed(context, 'register');
                     },
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.blue)),
                     child: const Text(
                       'Register',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: TextStyle(fontSize: 20),
                     )),
               ),
             ],
