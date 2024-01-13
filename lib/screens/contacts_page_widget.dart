@@ -3,6 +3,7 @@ import 'package:flutter_application_1/components/modal_contacts_delete.dart';
 import 'package:flutter_application_1/models/user_info.dart';
 import 'package:flutter_application_1/screens/header.dart';
 import 'package:intl/intl.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 import '../mongodb.dart';
 
@@ -23,9 +24,9 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
   List<String> listEyesColor = ['Blue', 'Green', 'Brown'];
   String? _eyesChoose;
 
-  List<String> selectedInterests = [];
+  List<String> _selectedInterests = [];
 
-  List<String> interestsList = [
+  List<String> _interestsList = [
     'Reading',
     'Traveling',
     'Photography',
@@ -137,14 +138,14 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(), hintText: 'Name'),
                     ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    TextFormField(
-                      controller: _lastNameController,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(), hintText: 'Last Name'),
-                    ),
+                    // const SizedBox(
+                    //   height: 16,
+                    // ),
+                    // TextFormField(
+                    //   controller: _lastNameController,
+                    //   decoration: const InputDecoration(
+                    //       border: OutlineInputBorder(), hintText: 'Last Name'),
+                    // ),
                     const SizedBox(
                       height: 16,
                     ),
@@ -168,6 +169,27 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                         }).toList(),
                         hint: Text('Choose your eyes color'),
                       ),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    MultiSelectDialogField<String>(
+                      chipDisplay: MultiSelectChipDisplay.none(),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey, width: 2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      items: _interestsList
+                          .map((interest) =>
+                              MultiSelectItem<String>(interest, interest))
+                          .toList(),
+                      title: Text('Select Interests'),
+                      buttonText: Text('Select Interests'),
+                      onConfirm: (values) {
+                        setState(() {
+                          _selectedInterests = values;
+                        });
+                      },
                     ),
                     const SizedBox(
                       height: 16,

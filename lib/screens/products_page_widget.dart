@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/header.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class ProductsPageWidget extends StatefulWidget {
   const ProductsPageWidget({super.key});
@@ -109,6 +110,24 @@ class _ProductsPageWidgetState extends State<ProductsPageWidget> {
                       value: valueItem, child: Text(valueItem));
                 }).toList(),
               ),
+            ),
+            MultiSelectDialogField<String>(
+              chipDisplay: MultiSelectChipDisplay.none(),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey, width: 2),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              items: interestsList
+                  .map(
+                      (interest) => MultiSelectItem<String>(interest, interest))
+                  .toList(),
+              title: Text('Select Interests'),
+              buttonText: Text('Select Interests'),
+              onConfirm: (values) {
+                setState(() {
+                  selectedInterests = values;
+                });
+              },
             ),
           ],
         ),
