@@ -22,7 +22,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     setState(() {
       _isLoading = true;
     });
-    await Future.delayed(const Duration(seconds: 2));
 
     var usersDb = await MongoDatabase.getUsers();
     setState(() {
@@ -33,31 +32,46 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var textStyleHeader = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
+
     return Scaffold(
         appBar: Header(pageTitle: 'Main'),
         body: _isLoading
             ? Center(child: CircularProgressIndicator())
-            : Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: SingleChildScrollView(
-                    child: DataTable(
-                      border: TableBorder.all(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.circular(10)),
-                      columns: const [
-                        DataColumn(label: Text('Email')),
-                        DataColumn(label: Text('User')),
-                      ],
-                      rows: users
-                          .map((elem) => DataRow(cells: [
-                                DataCell(Text(elem['email'])),
-                                DataCell(Text(elem['userName'])),
-                              ]))
-                          .toList(),
-                    ),
-                  ),
-                ),
-              ));
+            : SingleChildScrollView(
+                padding: EdgeInsets.all(20),
+                child: Table(
+                  border: TableBorder.all(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.grey),
+                  children: [
+                    TableRow(children: [
+                      Container(
+                          padding: EdgeInsets.all(10),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Email',
+                            style: textStyleHeader,
+                          )),
+                      Container(
+                          padding: EdgeInsets.all(10),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'User',
+                            style: textStyleHeader,
+                          )),
+                    ]),
+                    ...users.map((item) {
+                      return TableRow(children: [
+                        Container(
+                            padding: EdgeInsets.all(10),
+                            child: Text(item['email'])),
+                        Container(
+                            padding: EdgeInsets.all(10),
+                            child: Text(item['userName']))
+                      ]);
+                    }).toList()
+                  ],
+                )));
   }
 }
