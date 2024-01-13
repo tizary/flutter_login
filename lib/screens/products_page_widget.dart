@@ -11,6 +11,23 @@ class ProductsPageWidget extends StatefulWidget {
 class _ProductsPageWidgetState extends State<ProductsPageWidget> {
   String food = 'cheese';
   bool isChecked = false;
+
+  List<String> listItem = ['Blue', 'Green', 'Brown'];
+  String? eyesChoose;
+
+  List<String> selectedInterests = [];
+  List<String> interestsList = [
+    'Reading',
+    'Traveling',
+    'Photography',
+    'Cooking',
+    'Gaming',
+    'Sports',
+    'Music',
+    'Art',
+    'Movies',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,6 +88,27 @@ class _ProductsPageWidgetState extends State<ProductsPageWidget> {
                       });
                     })
               ],
+            ),
+            Text('Choose your eyes color'),
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border.all(width: 2, color: Colors.grey),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: DropdownButtonFormField<String>(
+                decoration: InputDecoration.collapsed(hintText: ''),
+                value: eyesChoose,
+                onChanged: (value) {
+                  setState(() {
+                    eyesChoose = value;
+                  });
+                },
+                items: listItem.map((valueItem) {
+                  return DropdownMenuItem<String>(
+                      value: valueItem, child: Text(valueItem));
+                }).toList(),
+              ),
             ),
           ],
         ),

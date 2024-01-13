@@ -20,6 +20,22 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
   String sex = 'male';
   bool isChecked = false;
   String? notUpdatedEmail;
+  List<String> listEyesColor = ['Blue', 'Green', 'Brown'];
+  String? _eyesChoose;
+
+  List<String> selectedInterests = [];
+
+  List<String> interestsList = [
+    'Reading',
+    'Traveling',
+    'Photography',
+    'Cooking',
+    'Gaming',
+    'Sports',
+    'Music',
+    'Art',
+    'Movies',
+  ];
 
   final _emailController = TextEditingController();
   final _firstNameController = TextEditingController();
@@ -128,6 +144,30 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                       controller: _lastNameController,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(), hintText: 'Last Name'),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 2, color: Colors.grey),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: DropdownButtonFormField<String>(
+                        decoration: InputDecoration.collapsed(hintText: ''),
+                        value: _eyesChoose,
+                        onChanged: (value) {
+                          setState(() {
+                            _eyesChoose = value;
+                          });
+                        },
+                        items: listEyesColor.map((valueItem) {
+                          return DropdownMenuItem<String>(
+                              value: valueItem, child: Text(valueItem));
+                        }).toList(),
+                        hint: Text('Choose your eyes color'),
+                      ),
                     ),
                     const SizedBox(
                       height: 16,
