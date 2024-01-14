@@ -1,7 +1,7 @@
 class UserInfo {
   String email;
   String firstName;
-  String lastName;
+  String eyes;
   String date;
   String sex;
   bool confirm;
@@ -9,7 +9,7 @@ class UserInfo {
   UserInfo(
       {required this.email,
       required this.firstName,
-      required this.lastName,
+      required this.eyes,
       required this.date,
       required this.sex,
       required this.confirm});
@@ -17,7 +17,7 @@ class UserInfo {
   Map<String, dynamic> toJson() => {
         'email': email,
         'firstName': firstName,
-        'lastName': lastName,
+        'eyes': eyes,
         'date': date,
         'sex': sex,
         'confirm': confirm
@@ -27,7 +27,7 @@ class UserInfo {
     return UserInfo(
       email: userMap['email'] as String,
       firstName: userMap['firstName'] as String,
-      lastName: userMap['lastName'] as String,
+      eyes: userMap['eyes'] as String,
       date: userMap['date'] as String,
       sex: userMap['sex'] as String,
       confirm: userMap['confirm'] as bool,

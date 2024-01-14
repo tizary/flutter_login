@@ -23,7 +23,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
   bool isChecked = false;
   String? notUpdatedEmail;
   List<String> listEyesColor = ['Blue', 'Green', 'Brown'];
-  String? _eyesChoose;
+  String _eyesChoose = '';
 
   List<String> _selectedInterests = [];
 
@@ -41,12 +41,12 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
 
   final _emailController = TextEditingController();
   final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
   final _date = TextEditingController();
 
   @override
   void initState() {
     getUsers();
+    _eyesChoose = listEyesColor.first;
     super.initState();
   }
 
@@ -76,11 +76,11 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
   void resetFields() {
     _emailController.clear();
     _firstNameController.clear();
-    _lastNameController.clear();
     _date.clear();
     setState(() {
       sex = 'male';
       isChecked = false;
+      _eyesChoose = listEyesColor.first;
     });
   }
 
@@ -103,7 +103,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
       builder: (BuildContext context) {
         return ModalContactsDelete(
           onYesPressed: onYesPressed,
-        ); // Используйте ваш класс модального окна
+        );
       },
     );
   }
@@ -153,36 +153,29 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                         return null;
                       },
                     ),
-                    // const SizedBox(
-                    //   height: 16,
-                    // ),
-                    // TextFormField(
-                    //   controller: _lastNameController,
-                    //   decoration: const InputDecoration(
-                    //       border: OutlineInputBorder(), hintText: 'Last Name'),
-                    // ),
                     const SizedBox(
                       height: 16,
                     ),
                     Container(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         border: Border.all(width: 2, color: Colors.grey),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: DropdownButtonFormField<String>(
-                        decoration: InputDecoration.collapsed(hintText: ''),
+                        decoration: const InputDecoration.collapsed(hintText: ''),
                         value: _eyesChoose,
                         onChanged: (value) {
                           setState(() {
-                            _eyesChoose = value;
+                            _eyesChoose = value as String;
+                            print(_eyesChoose);
                           });
                         },
                         items: listEyesColor.map((valueItem) {
                           return DropdownMenuItem<String>(
                               value: valueItem, child: Text(valueItem));
                         }).toList(),
-                        hint: Text('Choose your eyes color'),
+                        hint: const Text('Choose your eyes color'),
                       ),
                     ),
                     const SizedBox(
@@ -198,8 +191,8 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                           .map((interest) =>
                               MultiSelectItem<String>(interest, interest))
                           .toList(),
-                      title: Text('Select Interests'),
-                      buttonText: Text('Select Interests'),
+                      title: const Text('Select Interests'),
+                      buttonText: const Text('Select Interests'),
                       onConfirm: (values) {
                         setState(() {
                           _selectedInterests = values;
@@ -275,13 +268,12 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                                 if (_formKey.currentState!.validate()) {
                                   final email = _emailController.text;
                                   final name = _firstNameController.text;
-                                  final lastName = _lastNameController.text;
                                   final date = _date.text;
 
                                   UserInfo userInfo = UserInfo(
                                       email: email,
                                       firstName: name,
-                                      lastName: lastName,
+                                      eyes: _eyesChoose,
                                       date: date,
                                       sex: sex,
                                       confirm: isChecked);
@@ -321,13 +313,12 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                                   if (_formKey.currentState!.validate()) {
                                     final email = _emailController.text;
                                     final name = _firstNameController.text;
-                                    final lastName = _lastNameController.text;
                                     final date = _date.text;
 
                                     UserInfo userInfo = UserInfo(
                                         email: email,
                                         firstName: name,
-                                        lastName: lastName,
+                                        eyes: _eyesChoose,
                                         date: date,
                                         sex: sex,
                                         confirm: isChecked);
@@ -354,7 +345,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
             height: 20,
           ),
           _isLoading
-              ? SizedBox(
+              ? const SizedBox(
                   height: 100,
                   width: 100,
                   child: Center(child: CircularProgressIndicator()))
@@ -367,9 +358,9 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                               onPressed: () {
                                 _emailController.text = item.email;
                                 _firstNameController.text = item.firstName;
-                                _lastNameController.text = item.lastName;
                                 _date.text = item.date;
                                 setState(() {
+                                  _eyesChoose = item.eyes;
                                   notUpdatedEmail = item.email;
                                   sex = item.sex;
                                   isChecked = item.confirm;
@@ -380,7 +371,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                             title: Column(children: [
                               Text(item.email),
                               Text(item.firstName),
-                              Text(item.lastName),
+                              Text(item.eyes),
                               Text(item.date),
                               Text(item.sex),
                               Text(item.confirm ? 'confirm' : 'not confirmed'),
