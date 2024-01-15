@@ -4,7 +4,6 @@ import 'package:flutter_application_1/models/user_info.dart';
 import 'package:flutter_application_1/screens/header.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
-
 import '../mongodb.dart';
 
 class ContactsPageWidget extends StatefulWidget {
@@ -50,38 +49,39 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
     super.initState();
   }
 
-  void addUser(user) {
-    setState(() {
-      users.add(UserInfo.fromMap(user));
-    });
+  addUser(user) async {
+    var result = await MongoDatabase.insertUser(user);
+    if (result != null) {
+      setState(() {
+        users.add(UserInfo.fromMap(user));
+      });
+      resetFields();
+      return true;
+    }
+    return null;
   }
 
-  void updateUser(email, updatedUser) {
+  void updateUser(email, updatedUser) async {
+    await MongoDatabase.updateUser(email, updatedUser);
+    resetFields();
     setState(() {
       int index = users.indexWhere((element) => element.email == email);
       if (index != -1) {
         users[index] = UserInfo.fromMap(updatedUser);
       }
+      _activatedEdit = false;
     });
   }
 
   Future<void> deleteUserByEmail(email) async {
+    setState(() {
+      _isLoading = true;
+    });
     await MongoDatabase.deleteUser(email);
     resetFields();
     setState(() {
       users.removeWhere((element) => element.email == email);
-    });
-  }
-
-  void resetFields() {
-    _emailController.clear();
-    _firstNameController.clear();
-    _date.clear();
-    setState(() {
-      sex = 'male';
-      isChecked = false;
-      _eyesChoose = listEyesColor.first;
-      _selectedInterests = [];
+      _isLoading = false;
     });
   }
 
@@ -94,6 +94,18 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
     setState(() {
       users = usersDb.map((item) => UserInfo.fromMap(item)).toList();
       _isLoading = false;
+    });
+  }
+
+  void resetFields() {
+    _emailController.clear();
+    _firstNameController.clear();
+    _date.clear();
+    setState(() {
+      sex = 'male';
+      isChecked = false;
+      _eyesChoose = listEyesColor.first;
+      _selectedInterests = [];
     });
   }
 
@@ -281,8 +293,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                                       confirm: isChecked,
                                       interests: _selectedInterests);
 
-                                  var result = await MongoDatabase.insertUser(
-                                      userInfo.toJson());
+                                  var result = await addUser(userInfo.toJson());
                                   if (result == null) {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
@@ -291,8 +302,6 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                                           "User with that email already exists!"),
                                     ));
                                   } else {
-                                    addUser(userInfo.toJson());
-                                    resetFields();
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
                                       backgroundColor: Colors.green[400],
@@ -326,15 +335,9 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                                         sex: sex,
                                         confirm: isChecked,
                                         interests: _selectedInterests);
-                                    await MongoDatabase.updateUser(
-                                        email, userInfo.toJson());
                                     if (notUpdatedEmail != null) {
                                       updateUser(
                                           notUpdatedEmail, userInfo.toJson());
-                                      resetFields();
-                                      setState(() {
-                                        _activatedEdit = false;
-                                      });
                                     }
                                   }
                                 },
