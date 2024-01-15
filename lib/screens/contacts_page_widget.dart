@@ -25,7 +25,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
   List<String> listEyesColor = ['Blue', 'Green', 'Brown'];
   String _eyesChoose = '';
 
-  List<String> _selectedInterests = [];
+  List _selectedInterests = [];
 
   final List<String> _interestsList = [
     'Reading',
@@ -81,6 +81,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
       sex = 'male';
       isChecked = false;
       _eyesChoose = listEyesColor.first;
+      _selectedInterests = [];
     });
   }
 
@@ -88,7 +89,6 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
     setState(() {
       _isLoading = true;
     });
-    await Future.delayed(const Duration(seconds: 1));
     List<Map<String, Object?>> usersDb =
         await MongoDatabase.getUsersFromInfoUsers();
     setState(() {
@@ -163,7 +163,8 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: DropdownButtonFormField<String>(
-                        decoration: const InputDecoration.collapsed(hintText: ''),
+                        decoration:
+                            const InputDecoration.collapsed(hintText: ''),
                         value: _eyesChoose,
                         onChanged: (value) {
                           setState(() {
@@ -182,6 +183,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                       height: 16,
                     ),
                     MultiSelectDialogField<String>(
+                      initialValue: [..._selectedInterests],
                       chipDisplay: MultiSelectChipDisplay.none(),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey, width: 2),
@@ -276,7 +278,8 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                                       eyes: _eyesChoose,
                                       date: date,
                                       sex: sex,
-                                      confirm: isChecked);
+                                      confirm: isChecked,
+                                      interests: _selectedInterests);
 
                                   var result = await MongoDatabase.insertUser(
                                       userInfo.toJson());
@@ -321,7 +324,8 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                                         eyes: _eyesChoose,
                                         date: date,
                                         sex: sex,
-                                        confirm: isChecked);
+                                        confirm: isChecked,
+                                        interests: _selectedInterests);
                                     await MongoDatabase.updateUser(
                                         email, userInfo.toJson());
                                     if (notUpdatedEmail != null) {
@@ -365,6 +369,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                                   sex = item.sex;
                                   isChecked = item.confirm;
                                   _activatedEdit = true;
+                                  _selectedInterests = item.interests;
                                 });
                               },
                             ),
@@ -372,6 +377,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                               Text(item.email),
                               Text(item.firstName),
                               Text(item.eyes),
+                              Text(item.interests.join(', ')),
                               Text(item.date),
                               Text(item.sex),
                               Text(item.confirm ? 'confirm' : 'not confirmed'),
