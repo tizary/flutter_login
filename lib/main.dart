@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'app.dart';
-import 'mongodb.dart';
+import 'server/mongodb.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

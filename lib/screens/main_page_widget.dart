@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/mongodb.dart';
+import 'package:flutter_application_1/server/mongodb.dart';
 import 'package:flutter_application_1/screens/header.dart';
 
 class MainPageWidget extends StatefulWidget {
@@ -29,12 +29,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       users = usersDb;
       _isLoading = false;
     });
-  }
-
-  @override
-  void dispose() {
-    // usersDb?.cancel();
-    super.dispose();
   }
 
   @override
