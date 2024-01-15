@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/modal_contacts_delete.dart';
 import 'package:flutter_application_1/models/user_info.dart';
-import 'package:flutter_application_1/screens/header.dart';
+import 'package:flutter_application_1/components/header.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import '../server/mongodb.dart';

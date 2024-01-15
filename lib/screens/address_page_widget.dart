@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/header.dart';
+import 'package:flutter_application_1/components/header.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 const currentLocation = LatLng(45.433407932785656, 12.33051294893916);
