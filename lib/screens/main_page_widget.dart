@@ -12,6 +12,7 @@ class MainPageWidget extends StatefulWidget {
 class _MainPageWidgetState extends State<MainPageWidget> {
   bool _isLoading = false;
   List<Map> users = [];
+
   @override
   void initState() {
     getUsersList();
@@ -28,6 +29,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       users = usersDb;
       _isLoading = false;
     });
+  }
+
+  @override
+  void dispose() {
+    // usersDb?.cancel();
+    super.dispose();
   }
 
   @override
