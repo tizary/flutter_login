@@ -15,8 +15,8 @@ class MongoDatabase {
     infoUserCollection = db.collection('info');
   }
 
-  static getUsersFromInfoUsers() async {
-    return await infoUserCollection.find().toList();
+  static getUsersFromInfoUsers(id) async {
+    return await infoUserCollection.find({'userID': id}).toList();
   }
 
   static insertUser(data) async {

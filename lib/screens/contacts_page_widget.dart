@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/modal_contacts_delete.dart';
 import 'package:flutter_application_1/models/user_info.dart';
 import 'package:flutter_application_1/components/header.dart';
+import 'package:flutter_application_1/state/app_state.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import '../server/mongodb.dart';
@@ -14,6 +15,7 @@ class ContactsPageWidget extends StatefulWidget {
 }
 
 class _ContactsPageWidgetState extends State<ContactsPageWidget> {
+  final userID = AppState.userID;
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = true;
   bool _activatedEdit = false;
@@ -44,7 +46,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
 
   @override
   void initState() {
-    getUsers();
+    getUsers(userID);
     _eyesChoose = listEyesColor.first;
     super.initState();
   }
@@ -85,12 +87,13 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
     });
   }
 
-  Future getUsers() async {
+  Future getUsers(userID) async {
     setState(() {
       _isLoading = true;
     });
     List<Map<String, Object?>> usersDb =
-        await MongoDatabase.getUsersFromInfoUsers();
+        await MongoDatabase.getUsersFromInfoUsers(userID);
+
     setState(() {
       users = usersDb.map((item) => UserInfo.fromMap(item)).toList();
       _isLoading = false;
@@ -291,7 +294,8 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                                       date: date,
                                       sex: sex,
                                       confirm: isChecked,
-                                      interests: _selectedInterests);
+                                      interests: _selectedInterests,
+                                      userID: userID);
 
                                   var result = await addUser(userInfo.toJson());
                                   if (result == null) {
@@ -334,7 +338,8 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
                                         date: date,
                                         sex: sex,
                                         confirm: isChecked,
-                                        interests: _selectedInterests);
+                                        interests: _selectedInterests,
+                                        userID: userID);
                                     if (notUpdatedEmail != null) {
                                       updateUser(
                                           notUpdatedEmail, userInfo.toJson());

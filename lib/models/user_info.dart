@@ -6,6 +6,7 @@ class UserInfo {
   String date;
   String sex;
   bool confirm;
+  String userID;
 
   UserInfo({
     required this.email,
@@ -15,6 +16,7 @@ class UserInfo {
     required this.date,
     required this.sex,
     required this.confirm,
+    required this.userID
   });
 
   Map<String, dynamic> toJson() => {
@@ -25,6 +27,7 @@ class UserInfo {
         'date': date,
         'sex': sex,
         'confirm': confirm,
+        'userID': userID,
       };
 
   factory UserInfo.fromMap(Map<String, Object?> userMap) {
@@ -36,6 +39,7 @@ class UserInfo {
       date: userMap['date'] as String,
       sex: userMap['sex'] as String,
       confirm: userMap['confirm'] as bool,
+      userID: userMap['userID'] as String,
     );
   }
 }
