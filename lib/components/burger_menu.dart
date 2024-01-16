@@ -12,14 +12,14 @@ class _BurgerMenuState extends State<BurgerMenu> {
   @override
   Widget build(BuildContext context) {
     List<String> menu = [
-      'Main',
+      'Users data list',
       'Contacts',
       'Products',
       'Gallery',
       'Address',
     ];
     List<String> path = [
-      'main_page',
+      'users_list_page',
       'contacts_page',
       'products_page',
       'gallery_page',

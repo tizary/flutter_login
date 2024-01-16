@@ -33,105 +33,107 @@ class _ProductsPageWidgetState extends State<ProductsPageWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(pageTitle: 'Products'),
-      body: Padding(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Choose something',
-              style: TextStyle(fontSize: 20),
-            ),
-            ListTile(
-              leading: Radio(
-                  value: 'cheese',
-                  groupValue: food,
-                  onChanged: (value) {
-                    setState(() {
-                      food = value!;
-                    });
-                  }),
-              title: Text('Cheese'),
-            ),
-            ListTile(
-              leading: Radio(
-                  value: 'apple',
-                  groupValue: food,
-                  onChanged: (value) {
-                    setState(() {
-                      food = value!;
-                    });
-                  }),
-              title: Text('Apple'),
-            ),
-            ListTile(
-              leading: Radio(
-                  value: 'pork',
-                  groupValue: food,
-                  onChanged: (value) {
-                    setState(() {
-                      food = value!;
-                    });
-                  }),
-              title: Text('Pork'),
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Row(
-              children: [
-                Text('Сonfirm data'),
-                Checkbox(
-                    value: isChecked,
-                    onChanged: (value) {
-                      setState(() {
-                        isChecked = value!;
-                      });
-                    })
-              ],
-            ),
-            Text('Choose your eyes color'),
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                border: Border.all(width: 2, color: Colors.grey),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: DropdownButtonFormField<String>(
-                decoration: InputDecoration.collapsed(hintText: ''),
-                value: eyesChoose,
-                onChanged: (value) {
-                  setState(() {
-                    eyesChoose = value;
-                  });
-                },
-                items: listItem.map((valueItem) {
-                  return DropdownMenuItem<String>(
-                      value: valueItem, child: Text(valueItem));
-                }).toList(),
-              ),
-            ),
-            MultiSelectDialogField<String>(
-              chipDisplay: MultiSelectChipDisplay.none(),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey, width: 2),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              items: interestsList
-                  .map(
-                      (interest) => MultiSelectItem<String>(interest, interest))
-                  .toList(),
-              title: Text('Select Interests'),
-              buttonText: Text('Select Interests'),
-              onConfirm: (values) {
-                setState(() {
-                  selectedInterests = values;
-                });
-              },
-            ),
-          ],
-        ),
-      ),
+      body: Text('data'),
+
+      // Padding(
+      //   padding: EdgeInsets.all(20),
+      //   child: Column(
+      //     crossAxisAlignment: CrossAxisAlignment.start,
+      //     children: [
+      //       Text(
+      //         'Choose something',
+      //         style: TextStyle(fontSize: 20),
+      //       ),
+      //       ListTile(
+      //         leading: Radio(
+      //             value: 'cheese',
+      //             groupValue: food,
+      //             onChanged: (value) {
+      //               setState(() {
+      //                 food = value!;
+      //               });
+      //             }),
+      //         title: Text('Cheese'),
+      //       ),
+      //       ListTile(
+      //         leading: Radio(
+      //             value: 'apple',
+      //             groupValue: food,
+      //             onChanged: (value) {
+      //               setState(() {
+      //                 food = value!;
+      //               });
+      //             }),
+      //         title: Text('Apple'),
+      //       ),
+      //       ListTile(
+      //         leading: Radio(
+      //             value: 'pork',
+      //             groupValue: food,
+      //             onChanged: (value) {
+      //               setState(() {
+      //                 food = value!;
+      //               });
+      //             }),
+      //         title: Text('Pork'),
+      //       ),
+      //       SizedBox(
+      //         height: 50,
+      //       ),
+      //       Row(
+      //         children: [
+      //           Text('Сonfirm data'),
+      //           Checkbox(
+      //               value: isChecked,
+      //               onChanged: (value) {
+      //                 setState(() {
+      //                   isChecked = value!;
+      //                 });
+      //               })
+      //         ],
+      //       ),
+      //       Text('Choose your eyes color'),
+      //       Container(
+      //         padding: EdgeInsets.all(16),
+      //         decoration: BoxDecoration(
+      //           border: Border.all(width: 2, color: Colors.grey),
+      //           borderRadius: BorderRadius.circular(10),
+      //         ),
+      //         child: DropdownButtonFormField<String>(
+      //           decoration: InputDecoration.collapsed(hintText: ''),
+      //           value: eyesChoose,
+      //           onChanged: (value) {
+      //             setState(() {
+      //               eyesChoose = value;
+      //             });
+      //           },
+      //           items: listItem.map((valueItem) {
+      //             return DropdownMenuItem<String>(
+      //                 value: valueItem, child: Text(valueItem));
+      //           }).toList(),
+      //         ),
+      //       ),
+      //       MultiSelectDialogField<String>(
+      //         chipDisplay: MultiSelectChipDisplay.none(),
+      //         decoration: BoxDecoration(
+      //           border: Border.all(color: Colors.grey, width: 2),
+      //           borderRadius: BorderRadius.circular(10),
+      //         ),
+      //         items: interestsList
+      //             .map(
+      //                 (interest) => MultiSelectItem<String>(interest, interest))
+      //             .toList(),
+      //         title: Text('Select Interests'),
+      //         buttonText: Text('Select Interests'),
+      //         onConfirm: (values) {
+      //           setState(() {
+      //             selectedInterests = values;
+      //           });
+      //         },
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/server/mongodb.dart';
 import 'package:flutter_application_1/components/header.dart';
 
-class MainPageWidget extends StatefulWidget {
-  const MainPageWidget({super.key});
+class UsersListPageWidget extends StatefulWidget {
+  const UsersListPageWidget({super.key});
 
   @override
-  State<MainPageWidget> createState() => _MainPageWidgetState();
+  State<UsersListPageWidget> createState() => _UsersListPageWidgetState();
 }
 
-class _MainPageWidgetState extends State<MainPageWidget> {
+class _UsersListPageWidgetState extends State<UsersListPageWidget> {
   bool _isLoading = false;
   List<Map> users = [];
 
@@ -36,7 +36,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     var textStyleHeader = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
 
     return Scaffold(
-        appBar: Header(pageTitle: 'Main'),
+        appBar: Header(pageTitle: 'Users data list'),
         body: _isLoading
             ? Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
