@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/routes/app_routes.dart';
 
 class BurgerMenu extends StatefulWidget {
   final String user;
@@ -13,17 +14,17 @@ class _BurgerMenuState extends State<BurgerMenu> {
   Widget build(BuildContext context) {
     List<String> menu = [
       'Users data list',
-      'Contacts',
+      'Contacts info',
       'Phone contacts',
       'Gallery',
       'Address',
     ];
     List<String> path = [
-      'users_list_page',
-      'contacts_page',
-      'phone_contacts_page',
-      'gallery_page',
-      'address_page',
+      AppRoutes.userListPage,
+      AppRoutes.contactsInfoPage,
+      AppRoutes.phoneContactsPage,
+      AppRoutes.galleryPage,
+      AppRoutes.addressPage,
     ];
     final userName = widget.user.split('@').first;
     return Drawer(

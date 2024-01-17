@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/routes/app_routes.dart';
 import 'package:flutter_application_1/screens/address_page_widget.dart';
-import 'package:flutter_application_1/screens/contacts_page_widget.dart';
+import 'package:flutter_application_1/screens/contacts_info_page_widget.dart';
 import 'package:flutter_application_1/screens/gallery_page_widget.dart';
 import 'package:flutter_application_1/screens/home_page.dart';
 import 'package:flutter_application_1/screens/login_page.dart';
@@ -30,14 +31,16 @@ class App extends StatelessWidget {
           ),
         ),
         routes: {
-          'login': (context) => const LoginPage(),
-          'register': (context) => const RegisterPage(),
-          'user': (context) => UserPage(),
-          'users_list_page': (context) => const UsersListPageWidget(),
-          'contacts_page': (context) => const ContactsPageWidget(),
-          'phone_contacts_page': (context) => const PhoneContactsPageWidget(),
-          'gallery_page': (context) => const GalleryPageWidget(),
-          'address_page': (context) => const AddressPageWidget(),
+          AppRoutes.login: (context) => const LoginPage(),
+          AppRoutes.register: (context) => const RegisterPage(),
+          AppRoutes.user: (context) => UserPage(),
+          AppRoutes.userListPage: (context) => const UsersListPageWidget(),
+          AppRoutes.contactsInfoPage: (context) =>
+              const ContactsInfoPageWidget(),
+          AppRoutes.phoneContactsPage: (context) =>
+              const PhoneContactsPageWidget(),
+          AppRoutes.galleryPage: (context) => const GalleryPageWidget(),
+          AppRoutes.addressPage: (context) => const AddressPageWidget(),
         });
   }
 }

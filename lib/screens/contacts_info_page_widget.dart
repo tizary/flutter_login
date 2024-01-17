@@ -7,14 +7,14 @@ import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import '../server/mongodb.dart';
 
-class ContactsPageWidget extends StatefulWidget {
-  const ContactsPageWidget({super.key});
+class ContactsInfoPageWidget extends StatefulWidget {
+  const ContactsInfoPageWidget({super.key});
 
   @override
-  State<ContactsPageWidget> createState() => _ContactsPageWidgetState();
+  State<ContactsInfoPageWidget> createState() => _ContactsInfoPageWidgetState();
 }
 
-class _ContactsPageWidgetState extends State<ContactsPageWidget> {
+class _ContactsInfoPageWidgetState extends State<ContactsInfoPageWidget> {
   final userID = AppState.userID;
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = true;
@@ -126,7 +126,7 @@ class _ContactsPageWidgetState extends State<ContactsPageWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(pageTitle: 'Contacts'),
+      appBar: Header(pageTitle: 'Contacts info'),
       body: ListView(
         children: [
           Padding(
