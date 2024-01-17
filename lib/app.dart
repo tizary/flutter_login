@@ -5,7 +5,7 @@ import 'package:flutter_application_1/screens/gallery_page_widget.dart';
 import 'package:flutter_application_1/screens/home_page.dart';
 import 'package:flutter_application_1/screens/login_page.dart';
 import 'package:flutter_application_1/screens/users_list_page_widget.dart';
-import 'package:flutter_application_1/screens/products_page_widget.dart';
+import 'package:flutter_application_1/screens/phone_contacts_page_widget.dart';
 import 'package:flutter_application_1/screens/register_page.dart';
 import 'package:flutter_application_1/screens/user_page.dart';
 
@@ -35,7 +35,7 @@ class App extends StatelessWidget {
           'user': (context) => UserPage(),
           'users_list_page': (context) => const UsersListPageWidget(),
           'contacts_page': (context) => const ContactsPageWidget(),
-          'products_page': (context) => const ProductsPageWidget(),
+          'phone_contacts_page': (context) => const PhoneContactsPageWidget(),
           'gallery_page': (context) => const GalleryPageWidget(),
           'address_page': (context) => const AddressPageWidget(),
         });

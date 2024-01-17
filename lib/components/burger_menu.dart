@@ -14,14 +14,14 @@ class _BurgerMenuState extends State<BurgerMenu> {
     List<String> menu = [
       'Users data list',
       'Contacts',
-      'Products',
+      'Phone contacts',
       'Gallery',
       'Address',
     ];
     List<String> path = [
       'users_list_page',
       'contacts_page',
-      'products_page',
+      'phone_contacts_page',
       'gallery_page',
       'address_page',
     ];

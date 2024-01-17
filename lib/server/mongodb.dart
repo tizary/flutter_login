@@ -7,12 +7,16 @@ class MongoDatabase {
   static var infoUserCollection;
 
   static connect() async {
-    var db = await Db.create(
-        'mongodb+srv://test:test@cluster0.wm6sokd.mongodb.net/?retryWrites=true&w=majority');
-    await db.open();
-    inspect(db);
-    usersCollection = db.collection('users');
-    infoUserCollection = db.collection('info');
+    try {
+      var db = await Db.create(
+          'mongodb+srv://test:test@cluster0.wm6sokd.mongodb.net/?retryWrites=true&w=majority');
+      await db.open();
+      inspect(db);
+      usersCollection = db.collection('users');
+      infoUserCollection = db.collection('info');
+    } catch (e) {
+      print(e);
+    }
   }
 
   static getUsersFromInfoUsers(id) async {
