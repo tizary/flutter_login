@@ -91,6 +91,16 @@ class _LoginPageState extends State<LoginPage> {
                           final password = _passwordController.text;
                           if (form.validate()) {
                             try {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                },
+                              );
+
                               final user = await MongoDatabase.loginUser(
                                   email, password);
                               AppState.userID = user['_id'].toString();
@@ -100,6 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                                 _loginError = false;
                               });
                             } catch (e) {
+                              Navigator.pop(context);
                               print(e);
                               setState(() {
                                 _loginError = true;

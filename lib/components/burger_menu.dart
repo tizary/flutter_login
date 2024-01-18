@@ -151,8 +151,6 @@ class _BurgerMenuState extends State<BurgerMenu> {
 
   @override
   Widget build(BuildContext context) {
-    // final userName = widget.user.userName;
-
     final userName = user.userName;
     return Drawer(
       child: ListView(
