@@ -36,7 +36,7 @@ class _UsersListPageWidgetState extends State<UsersListPageWidget> {
     var textStyleHeader = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
 
     return Scaffold(
-        appBar: Header(pageTitle: 'Users data list'),
+        appBar: Header(pageTitle: 'List of registered users'),
         body: _isLoading
             ? Center(child: CircularProgressIndicator())
             : SingleChildScrollView(

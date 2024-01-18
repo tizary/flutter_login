@@ -10,10 +10,9 @@ class UserPage extends StatefulWidget {
 class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
-    final userData = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
         appBar: Header(pageTitle: 'User'),
-        drawer: BurgerMenu(user: userData),
+        drawer: BurgerMenu(),
         body: Center(child: Text('hello')));
   }
 }

@@ -34,7 +34,7 @@ class App extends StatelessWidget {
           AppRoutes.login: (context) => const LoginPage(),
           AppRoutes.register: (context) => const RegisterPage(),
           AppRoutes.user: (context) => UserPage(),
-          AppRoutes.userListPage: (context) => const UsersListPageWidget(),
+          AppRoutes.usersListPage: (context) => const UsersListPageWidget(),
           AppRoutes.contactsInfoPage: (context) =>
               const ContactsInfoPageWidget(),
           AppRoutes.phoneContactsPage: (context) =>

@@ -147,7 +147,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                   User user = User(
                                       email: email,
                                       userName: userName,
-                                      password: password);
+                                      password: password,
+                                      imageSrc: '');
                                   try {
                                     setState(() {
                                       _passwordError = false;

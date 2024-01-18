@@ -3,6 +3,8 @@ import 'package:flutter_application_1/server/mongodb.dart';
 import 'package:flutter_application_1/components/header.dart';
 import 'package:flutter_application_1/state/app_state.dart';
 
+import '../models/user.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -93,11 +95,9 @@ class _LoginPageState extends State<LoginPage> {
                             try {
                               final user = await MongoDatabase.loginUser(
                                   email, password);
-
                               AppState.userID = user['_id'].toString();
-
-                              Navigator.pushNamed(context, 'user',
-                                  arguments: user['userName']);
+                              AppState.userStore = User.fromMap(user);
+                              Navigator.pushNamed(context, 'user');
                               setState(() {
                                 _loginError = false;
                               });

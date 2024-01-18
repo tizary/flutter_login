@@ -1,6 +1,11 @@
 import 'dart:developer';
-
 import 'package:mongo_dart/mongo_dart.dart';
+import 'dart:typed_data';
+import 'dart:convert';
+
+String convertImageToBase64(Uint8List image) {
+  return base64Encode(image);
+}
 
 class MongoDatabase {
   static var usersCollection;
@@ -70,4 +75,13 @@ class MongoDatabase {
       return null;
     }
   }
+
+  // static addUserImage(email, image) async {
+  //   try {
+  //     var user = usersCollection.findOne({'email': email});
+
+  //   } catch (e) {
+
+  //   }
+  // }
 }
