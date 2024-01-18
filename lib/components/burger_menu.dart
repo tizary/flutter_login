@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -5,8 +6,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_application_1/routes/app_routes.dart';
 import 'package:flutter_application_1/state/app_state.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
 
 import '../models/user.dart';
+import '../server/mongodb.dart';
 
 class BurgerMenu extends StatefulWidget {
   const BurgerMenu({super.key});
@@ -16,7 +20,38 @@ class BurgerMenu extends StatefulWidget {
 }
 
 class _BurgerMenuState extends State<BurgerMenu> {
+  File? _imageFile;
   final User user = AppState.userStore;
+
+  Future _createFileFromString() async {
+    if (user.imageSrc.isNotEmpty) {
+      final encodedStr = user.imageSrc;
+      Uint8List bytes = base64.decode(encodedStr);
+      String dir = (await getApplicationDocumentsDirectory()).path;
+      File file = File(
+          "$dir/" + DateTime.now().millisecondsSinceEpoch.toString() + ".jpg");
+      await file.writeAsBytes(bytes);
+      return file;
+    }
+    return null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImageFile();
+  }
+
+  Future<void> _loadImageFile() async {
+    try {
+      final imagePermanent = await _createFileFromString();
+      setState(() {
+        _imageFile = imagePermanent;
+      });
+    } catch (e) {
+      print('Error loading image file: $e');
+    }
+  }
 
   List<String> menu = [
     'Registered Users',
@@ -33,20 +68,34 @@ class _BurgerMenuState extends State<BurgerMenu> {
     AppRoutes.addressPage,
   ];
 
-  File? _imageFile;
-
   Future<void> _getImage(source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
       if (image == null) return;
 
       final imagePath = File(image.path);
+      final Uint8List imageBytes = await image.readAsBytes();
+      String base64Image = base64Encode(imageBytes);
+
+      user.imageSrc = base64Image;
+      await MongoDatabase.addUserImage(user.email, base64Image);
+
+      final imagePermanent = await saveFile(image.path);
+
       setState(() {
-        _imageFile = imagePath;
+        _imageFile = imagePermanent;
       });
     } on PlatformException catch (e) {
       print('Falied to pick image: $e');
     }
+  }
+
+  Future<File> saveFile(imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = basename(imagePath);
+    final image = File('${directory.path}/$name');
+
+    return File(imagePath).copy(image.path);
   }
 
   void showImagePicker(BuildContext context) {
@@ -103,6 +152,7 @@ class _BurgerMenuState extends State<BurgerMenu> {
   @override
   Widget build(BuildContext context) {
     // final userName = widget.user.userName;
+
     final userName = user.userName;
     return Drawer(
       child: ListView(

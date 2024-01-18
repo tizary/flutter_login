@@ -76,12 +76,12 @@ class MongoDatabase {
     }
   }
 
-  // static addUserImage(email, image) async {
-  //   try {
-  //     var user = usersCollection.findOne({'email': email});
-
-  //   } catch (e) {
-
-  //   }
-  // }
+  static addUserImage(email, image) async {
+    try {
+      await usersCollection.updateOne(
+          where.eq('email', email), modify.set('imageSrc', image));
+    } catch (e) {
+      print('Error adding image: $e');
+    }
+  }
 }
