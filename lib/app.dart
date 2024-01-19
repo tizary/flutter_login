@@ -10,9 +10,9 @@ import 'package:flutter_application_1/screens/phone_contacts_page_widget.dart';
 import 'package:flutter_application_1/screens/register_page.dart';
 import 'package:flutter_application_1/screens/user_page.dart';
 
-import 'screens/user_page/user_location_page_widget.dart';
-import 'screens/user_page/user_profile_page_widget.dart';
-import 'screens/user_page/user_wallet_page_widget.dart';
+import 'screens/user_page_widgets/user_location_page_widget.dart';
+import 'screens/user_page_widgets/user_profile_page_widget.dart';
+import 'screens/user_page_widgets/user_wallet_page_widget.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
