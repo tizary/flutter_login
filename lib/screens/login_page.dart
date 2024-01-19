@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: Header(pageTitle: 'Login'),
+      appBar: const Header(pageTitle: 'Login'),
       body: Form(
           key: _formKey,
           child: Center(
@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: 300,
                   child: TextFormField(
                     controller: _emailController,
@@ -63,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Container(
+                SizedBox(
                   width: 300,
                   child: TextFormField(
                     controller: _passwordController,
@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Container(
+                SizedBox(
                     width: 200,
                     height: 50,
                     child: ElevatedButton(
@@ -95,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                                 context: context,
                                 barrierDismissible: false,
                                 builder: (BuildContext context) {
-                                  return Center(
+                                  return const Center(
                                     child: CircularProgressIndicator(),
                                   );
                                 },

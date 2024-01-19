@@ -26,7 +26,7 @@ class _PhoneContactsPageWidgetState extends State<PhoneContactsPageWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(pageTitle: 'Phone contacts'),
+      appBar: const Header(pageTitle: 'Phone contacts'),
       body: FutureBuilder(
           future: getContacts(),
           builder: (context, AsyncSnapshot snapshot) {
@@ -37,7 +37,7 @@ class _PhoneContactsPageWidgetState extends State<PhoneContactsPageWidget> {
             }
 
             if (!snapshot.hasData || snapshot.data.isEmpty) {
-              return Center(child: Text('No contacts'));
+              return const Center(child: Text('No contacts'));
             }
             return ListView.builder(
                 itemCount: snapshot.data.length,
@@ -51,7 +51,7 @@ class _PhoneContactsPageWidgetState extends State<PhoneContactsPageWidget> {
                           for (var phone in contact.phones) Text(phone.number),
                         ],
                       ),
-                      Divider(),
+                      const Divider(),
                     ],
                   );
                 });

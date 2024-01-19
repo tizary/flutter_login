@@ -22,7 +22,7 @@ class _GalleryPageWidgetState extends State<GalleryPageWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(pageTitle: 'Gallery'),
+      appBar: const Header(pageTitle: 'Gallery'),
       body: Padding(
           padding: const EdgeInsets.all(20),
           child: FutureBuilder(
@@ -45,7 +45,7 @@ class _GalleryPageWidgetState extends State<GalleryPageWidget> {
                   itemBuilder: (context, index) {
                     var imageUrl = snapshot.data[index];
                     return Container(
-                        padding: EdgeInsets.symmetric(vertical: 20),
+                        padding: const EdgeInsets.symmetric(vertical: 20),
                         width: 200,
                         height: 300,
                         child: Image(

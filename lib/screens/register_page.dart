@@ -34,7 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)));
 
     return Scaffold(
-      appBar: Header(pageTitle: 'Register'),
+      appBar: const Header(pageTitle: 'Register'),
       body: Center(
         child: SingleChildScrollView(
           child: Form(
@@ -45,7 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                       width: 300,
                       child: TextFormField(
                         controller: _emailController,
@@ -68,7 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    Container(
+                    SizedBox(
                       width: 300,
                       child: TextFormField(
                         controller: _userNameController,
@@ -83,7 +83,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    Container(
+                    SizedBox(
                       width: 300,
                       child: TextFormField(
                         controller: _passwordController,
@@ -99,7 +99,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    Container(
+                    SizedBox(
                       width: 300,
                       child: TextFormField(
                         controller: _repeatPasswordController,
@@ -131,7 +131,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                     const SizedBox(height: 16),
-                    Container(
+                    SizedBox(
                         width: 200,
                         height: 50,
                         child: ElevatedButton(

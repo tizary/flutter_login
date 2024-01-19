@@ -126,7 +126,7 @@ class _ContactsInfoPageWidgetState extends State<ContactsInfoPageWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(pageTitle: 'Contacts info'),
+      appBar: const Header(pageTitle: 'Contacts info'),
       body: ListView(
         children: [
           Padding(
@@ -277,7 +277,7 @@ class _ContactsInfoPageWidgetState extends State<ContactsInfoPageWidget> {
                     ),
                     Row(
                       children: [
-                        Container(
+                        SizedBox(
                           width: 130,
                           height: 50,
                           child: ElevatedButton(
@@ -321,7 +321,7 @@ class _ContactsInfoPageWidgetState extends State<ContactsInfoPageWidget> {
                           width: 16,
                         ),
                         if (_activatedEdit)
-                          Container(
+                          SizedBox(
                             width: 130,
                             height: 50,
                             child: ElevatedButton(

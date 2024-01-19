@@ -33,7 +33,7 @@ class App extends StatelessWidget {
         routes: {
           AppRoutes.login: (context) => const LoginPage(),
           AppRoutes.register: (context) => const RegisterPage(),
-          AppRoutes.user: (context) => UserPage(),
+          AppRoutes.user: (context) => const UserPage(),
           AppRoutes.usersListPage: (context) => const UsersListPageWidget(),
           AppRoutes.contactsInfoPage: (context) =>
               const ContactsInfoPageWidget(),

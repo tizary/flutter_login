@@ -7,7 +7,7 @@ const currentLocation = LatLng(45.433407932785656, 12.33051294893916);
 const apiKey = 'AIzaSyDWZWwMKwJDS6Fd1cBXIzis1xfOgpreOmg';
 
 class AddressPageWidget extends StatefulWidget {
-  const AddressPageWidget({Key? key});
+  const AddressPageWidget({super.key});
 
   @override
   State<AddressPageWidget> createState() => _AddressPageWidgetState();
@@ -41,7 +41,7 @@ class _AddressPageWidgetState extends State<AddressPageWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(pageTitle: 'Address'),
+      appBar: const Header(pageTitle: 'Address'),
       body: Column(
         children: [
           Row(
@@ -70,7 +70,7 @@ class _AddressPageWidgetState extends State<AddressPageWidget> {
             child: GoogleMap(
                 onMapCreated: _onMapCreated,
                 initialCameraPosition:
-                    CameraPosition(target: currentLocation, zoom: 12.0)),
+                    const CameraPosition(target: currentLocation, zoom: 12.0)),
           ),
         ],
       ),

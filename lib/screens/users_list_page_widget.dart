@@ -33,14 +33,15 @@ class _UsersListPageWidgetState extends State<UsersListPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var textStyleHeader = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
+    var textStyleHeader =
+        const TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
 
     return Scaffold(
-        appBar: Header(pageTitle: 'List of registered users'),
+        appBar: const Header(pageTitle: 'List of registered users'),
         body: _isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Table(
                   border: TableBorder.all(
                       borderRadius: BorderRadius.circular(5),
@@ -48,14 +49,14 @@ class _UsersListPageWidgetState extends State<UsersListPageWidget> {
                   children: [
                     TableRow(children: [
                       Container(
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           alignment: Alignment.center,
                           child: Text(
                             'Email',
                             style: textStyleHeader,
                           )),
                       Container(
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           alignment: Alignment.center,
                           child: Text(
                             'User',
@@ -65,13 +66,13 @@ class _UsersListPageWidgetState extends State<UsersListPageWidget> {
                     ...users.map((item) {
                       return TableRow(children: [
                         Container(
-                            padding: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             child: Text(item['email'])),
                         Container(
-                            padding: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             child: Text(item['userName']))
                       ]);
-                    }).toList()
+                    })
                   ],
                 )));
   }
