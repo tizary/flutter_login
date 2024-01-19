@@ -11,71 +11,116 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  bool isSwitch = false;
+  int _currentWidget = 0;
+  List<Widget> widgets = const [
+    MainWidget(),
+    Icon(Icons.business),
+    Icon(Icons.currency_exchange_outlined),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[200],
-        appBar: const Header(pageTitle: 'User'),
-        drawer: const BurgerMenu(),
-        body: ListView(
-          padding: const EdgeInsets.all(20),
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
+      backgroundColor: Colors.grey[200],
+      appBar: const Header(pageTitle: 'User'),
+      drawer: const BurgerMenu(),
+      body: widgets[_currentWidget],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentWidget,
+        onTap: (int newIndex) {
+          setState(() {
+            _currentWidget = newIndex;
+          });
+        },
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Main',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Business',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.currency_exchange_outlined),
+            label: 'Exchange Rates',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MainWidget extends StatefulWidget {
+  const MainWidget({
+    super.key,
+  });
+
+  @override
+  State<MainWidget> createState() => _MainWidgetState();
+}
+
+class _MainWidgetState extends State<MainWidget> {
+  bool isSwitch = false;
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.all(20),
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            children: [
+              ListOfTilesWidget(
+                iconLeading: Icons.account_box_rounded,
+                text: 'Profile',
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.userProfilePage);
+                },
               ),
-              child: Column(
-                children: [
-                  ListOfTilesWidget(
-                    iconLeading: Icons.account_box_rounded,
-                    text: 'Profile',
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.userProfilePage);
-                    },
-                  ),
-                  const Divider(),
-                  ListOfTilesWidget(
-                    iconLeading: Icons.account_balance_wallet,
-                    text: 'Wallet',
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.userWalletPage);
-                    },
-                  ),
-                  const Divider(),
-                  ListOfTilesWidget(
-                    iconLeading: Icons.add_location_rounded,
-                    text: 'Location',
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.userLocationPage);
-                    },
-                  ),
-                  const Divider(),
-                  ListTile(
-                    leading: const Icon(
-                      Icons.audiotrack_rounded,
-                      size: 32,
-                    ),
-                    title: const Text(
-                      'Sounds',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    trailing: Switch(
-                        value: isSwitch,
-                        onChanged: (value) {
-                          setState(() {
-                            isSwitch = value;
-                          });
-                        }),
-                    onTap: () {},
-                  ),
-                ],
+              const Divider(),
+              ListOfTilesWidget(
+                iconLeading: Icons.account_balance_wallet,
+                text: 'Wallet',
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.userWalletPage);
+                },
               ),
-            )
-          ],
-        ));
+              const Divider(),
+              ListOfTilesWidget(
+                iconLeading: Icons.add_location_rounded,
+                text: 'Location',
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.userLocationPage);
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(
+                  Icons.audiotrack_rounded,
+                  size: 32,
+                ),
+                title: const Text(
+                  'Sounds',
+                  style: TextStyle(fontSize: 18),
+                ),
+                trailing: Switch(
+                    value: isSwitch,
+                    onChanged: (value) {
+                      setState(() {
+                        isSwitch = value;
+                      });
+                    }),
+              ),
+            ],
+          ),
+        )
+      ],
+    );
   }
 }
 

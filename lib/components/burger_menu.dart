@@ -73,7 +73,7 @@ class _BurgerMenuState extends State<BurgerMenu> {
       final image = await ImagePicker().pickImage(source: source);
       if (image == null) return;
 
-      final imagePath = File(image.path);
+      // final imagePath = File(image.path);
       final Uint8List imageBytes = await image.readAsBytes();
       String base64Image = base64Encode(imageBytes);
 
