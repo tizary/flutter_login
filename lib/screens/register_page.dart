@@ -156,7 +156,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                     var result =
                                         await MongoDatabase.registerUser(
                                             user.toJson());
-                                    if (result != null) {
+                                    if (result == null) {
+                                      return;
+                                    }
+                                    if (result != false) {
                                       Navigator.pushNamed(context, 'login');
                                       resetFields();
                                       setState(() {
@@ -168,7 +171,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       });
                                     }
                                   } catch (e) {
-                                    print(e);
+                                    throw Exception('Registration failed: $e');
                                   }
                                 } else {
                                   setState(() {

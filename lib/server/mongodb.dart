@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:developer';
+import 'package:flutter_application_1/utils/network_util.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'dart:typed_data';
 import 'dart:convert';
@@ -8,80 +10,175 @@ String convertImageToBase64(Uint8List image) {
 }
 
 class MongoDatabase {
-  static var usersCollection;
-  static var infoUserCollection;
+  static const String connectionUrl =
+      'mongodb+srv://test:test@cluster0.wm6sokd.mongodb.net/?retryWrites=true&w=majority';
+  static late DbCollection usersCollection;
+  static late DbCollection infoUserCollection;
 
-  static connect() async {
+  static Db _db = Db('');
+
+  static Future<void> connect() async {
     try {
-      var db = await Db.create(
-          'mongodb+srv://test:test@cluster0.wm6sokd.mongodb.net/?retryWrites=true&w=majority');
-      await db.open();
-      inspect(db);
-      usersCollection = db.collection('users');
-      infoUserCollection = db.collection('info');
+      if (!await NetworkUtil.hasConnection()) {
+        return;
+      }
+
+      _db = await Db.create(connectionUrl);
+      await _db.open();
+      log('Connected to MongoDB');
+      usersCollection = _db.collection('users');
+      infoUserCollection = _db.collection('info');
     } catch (e) {
-      print(e);
+      throw const ConnectionException('Failed to connect to MongoDB');
     }
+  }
+
+  static Future<void> _checkConnection() async {
+    try {
+      await _db.runCommand({'ping': 1});
+    } catch (e) {
+      await _reconnect();
+    }
+  }
+
+  static Future<void> _reconnect() async {
+    _db.close();
+
+    _db = await Db.create(connectionUrl);
+    await _db.open();
+    usersCollection = _db.collection('users');
+    infoUserCollection = _db.collection('info');
   }
 
   static getUsersFromInfoUsers(id) async {
-    return await infoUserCollection.find({'userID': id}).toList();
+    if (!await NetworkUtil.hasConnection()) {
+      return;
+    }
+    await _checkConnection();
+
+    try {
+      return await infoUserCollection.find({'userID': id}).toList();
+    } catch (e) {
+      throw Exception('Error get users from MongoDB: $e');
+    }
   }
 
   static insertUser(data) async {
-    var user = await infoUserCollection.findOne({'email': data['email']});
-    if (user == null) {
-      return await infoUserCollection.insertOne(data);
+    if (!await NetworkUtil.hasConnection()) {
+      return;
     }
-    print('User with email ${data["email"]} already exists');
-    return null;
+    await _checkConnection();
+
+    try {
+      var user = await infoUserCollection.findOne({'email': data['email']});
+      if (user == null) {
+        return await infoUserCollection.insertOne(data);
+      }
+      return false;
+    } catch (e) {
+      throw Exception('Error inserting user into infoUserCollection: $e');
+    }
   }
 
   static updateUser(email, data) async {
-    var user = await infoUserCollection.findOne({'email': email});
-    if (user != null) {
-      var filter = {'email': email};
-      return await infoUserCollection.replaceOne(filter, data);
+    if (!await NetworkUtil.hasConnection()) {
+      return;
     }
-    return null;
+    await _checkConnection();
+
+    try {
+      var user = await infoUserCollection.findOne({'email': email});
+      if (user != null) {
+        var filter = {'email': email};
+        return await infoUserCollection.replaceOne(filter, data);
+      }
+      return false;
+    } catch (e) {
+      throw Exception('Error updating user in infoUserCollection: $e');
+    }
   }
 
   static deleteUser(email) async {
-    var user = await infoUserCollection.findOne({'email': email});
-    if (user != null) {
-      return await infoUserCollection.deleteOne({'email': email});
+    if (!await NetworkUtil.hasConnection()) {
+      return null;
     }
-    return null;
+
+    await _checkConnection();
+
+    try {
+      var user = await infoUserCollection.findOne({'email': email});
+      if (user != null) {
+        return await infoUserCollection.deleteOne({'email': email});
+      }
+      return false;
+    } catch (e) {
+      throw Exception('Error deleting user from infoUserCollection: $e');
+    }
   }
 
   static Future<List<Map>> getUsers() async {
-    return await usersCollection.find().toList();
+    if (!await NetworkUtil.hasConnection()) {
+      return [];
+    }
+    await _checkConnection();
+
+    try {
+      return await usersCollection.find().toList();
+    } catch (e) {
+      throw Exception('Error retrieving users from usersCollection: $e');
+    }
   }
 
   static registerUser(data) async {
-    var user = await usersCollection.findOne({'email': data['email']});
-    if (user == null) {
-      return await usersCollection.insertOne(data);
+    if (!await NetworkUtil.hasConnection()) {
+      return;
     }
-    print('User with email ${data["email"]} already exists');
-    return null;
+    await _checkConnection();
+
+    try {
+      var user = await usersCollection.findOne({'email': data['email']});
+      if (user == null) {
+        return await usersCollection.insertOne(data);
+      }
+      return false;
+    } catch (e) {
+      throw Exception('Error registering user in usersCollection: $e');
+    }
   }
 
   static loginUser(email, password) async {
-    var user = await usersCollection.findOne({'email': email});
-    if (user != null && user['password'] == password) {
-      return user;
-    } else {
-      return null;
+    if (!await NetworkUtil.hasConnection()) {
+      return;
+    }
+    await _checkConnection();
+
+    try {
+      var user = await usersCollection.findOne({'email': email});
+      if (user != null && user['password'] == password) {
+        return user;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      throw Exception('Error logging in user: $e');
     }
   }
 
   static addUserImage(email, image) async {
+    if (!await NetworkUtil.hasConnection()) {
+      return;
+    }
+    await _checkConnection();
+
     try {
-      await usersCollection.updateOne(
-          where.eq('email', email), modify.set('imageSrc', image));
+      try {
+        await usersCollection.updateOne(
+            where.eq('email', email), modify.set('imageSrc', image));
+      } catch (e) {
+        throw Exception('Error adding image: $e');
+      }
     } catch (e) {
-      print('Error adding image: $e');
+      throw Exception('Error adding image to user: $e');
     }
   }
 }

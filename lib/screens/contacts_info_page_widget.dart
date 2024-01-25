@@ -52,52 +52,76 @@ class _ContactsInfoPageWidgetState extends State<ContactsInfoPageWidget> {
   }
 
   addUser(user) async {
-    var result = await MongoDatabase.insertUser(user);
-    if (result != null) {
-      setState(() {
-        users.add(UserInfo.fromMap(user));
-      });
-      resetFields();
-      return true;
+    try {
+      var result = await MongoDatabase.insertUser(user);
+      if (result == null) return;
+      if (result != false) {
+        setState(() {
+          users.add(UserInfo.fromMap(user));
+        });
+        resetFields();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      throw Exception('Error add user: $e');
     }
-    return null;
   }
 
   void updateUser(email, updatedUser) async {
-    await MongoDatabase.updateUser(email, updatedUser);
-    resetFields();
-    setState(() {
-      int index = users.indexWhere((element) => element.email == email);
-      if (index != -1) {
-        users[index] = UserInfo.fromMap(updatedUser);
-      }
-      _activatedEdit = false;
-    });
+    try {
+      var result = await MongoDatabase.updateUser(email, updatedUser);
+      if (result == null) return;
+      resetFields();
+      setState(() {
+        int index = users.indexWhere((element) => element.email == email);
+        if (index != -1) {
+          users[index] = UserInfo.fromMap(updatedUser);
+        }
+        _activatedEdit = false;
+      });
+    } catch (e) {
+      throw Exception('Error updating user: $e');
+    }
   }
 
   Future<void> deleteUserByEmail(email) async {
-    setState(() {
-      _isLoading = true;
-    });
-    await MongoDatabase.deleteUser(email);
-    resetFields();
-    setState(() {
-      users.removeWhere((element) => element.email == email);
-      _isLoading = false;
-    });
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      var result = await MongoDatabase.deleteUser(email);
+      if (result == null) {
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
+      resetFields();
+      setState(() {
+        users.removeWhere((element) => element.email == email);
+        _isLoading = false;
+      });
+    } catch (e) {
+      throw Exception('Error updating user: $e');
+    }
   }
 
   Future getUsers(userID) async {
-    setState(() {
-      _isLoading = true;
-    });
-    List<Map<String, Object?>> usersDb =
-        await MongoDatabase.getUsersFromInfoUsers(userID);
+    try {
+      setState(() {
+        _isLoading = true;
+      });
 
-    setState(() {
-      users = usersDb.map((item) => UserInfo.fromMap(item)).toList();
-      _isLoading = false;
-    });
+      List<Map<String, Object?>> usersDb =
+          await MongoDatabase.getUsersFromInfoUsers(userID);
+      setState(() {
+        users = usersDb.map((item) => UserInfo.fromMap(item)).toList();
+        _isLoading = false;
+      });
+    } catch (e) {
+      throw Exception('Error deleting user: $e');
+    }
   }
 
   void resetFields() {
@@ -184,7 +208,6 @@ class _ContactsInfoPageWidgetState extends State<ContactsInfoPageWidget> {
                         onChanged: (value) {
                           setState(() {
                             _eyesChoose = value as String;
-                            print(_eyesChoose);
                           });
                         },
                         items: listEyesColor.map((valueItem) {
@@ -298,7 +321,8 @@ class _ContactsInfoPageWidgetState extends State<ContactsInfoPageWidget> {
                                       userID: userID);
 
                                   var result = await addUser(userInfo.toJson());
-                                  if (result == null) {
+                                  if (result == null) return;
+                                  if (result == false) {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
                                       backgroundColor: Colors.red[400],
@@ -397,9 +421,6 @@ class _ContactsInfoPageWidgetState extends State<ContactsInfoPageWidget> {
                                 final email = item.email;
                                 _showModal(
                                     context, () => deleteUserByEmail(email));
-                                // await MongoDatabase.deleteUser(email);
-                                // deleteUserByEmail(email);
-                                // resetFields();
                               },
                             ),
                           ),

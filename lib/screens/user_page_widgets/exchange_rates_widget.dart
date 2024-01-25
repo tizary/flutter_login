@@ -68,61 +68,69 @@ class _ExchangeRatesWidgetState extends State<ExchangeRatesWidget> {
                     );
                   } else if (snapshot.hasData) {
                     final List<CurrencyRate> data = snapshot.data;
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ListView.builder(
-                          itemCount: data.length,
-                          itemBuilder: (context, index) {
-                            String scale = '';
-                            if (data[index].curScale != 1) {
-                              scale = ' ${data[index].curScale}';
-                            }
-                            return Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              data[index].curAbbreviation,
-                                              style: const TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              scale,
-                                              style: const TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Text(
-                                            data[index].curRate.toString(),
-                                            style: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold),
+                    if (data.isEmpty) {
+                      return const Center(
+                        child: Text('no internet connection'),
+                      );
+                    } else {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ListView.builder(
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              String scale = '';
+                              if (data[index].curScale != 1) {
+                                scale = ' ${data[index].curScale}';
+                              }
+                              return Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                data[index].curAbbreviation,
+                                                style: const TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                scale,
+                                                style: const TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        Expanded(
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              data[index].curRate.toString(),
+                                              style: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const Divider(),
-                              ],
-                            );
-                          }),
-                    );
+                                  const Divider(),
+                                ],
+                              );
+                            }),
+                      );
+                    }
                   }
                 }
 
@@ -136,15 +144,22 @@ class _ExchangeRatesWidgetState extends State<ExchangeRatesWidget> {
   }
 
   Future getListOfRates(value) async {
-    List<CurrencyRate> listAllCurrency = [];
-    List<String> listRequiredCurrency = ['USD', 'EUR', 'RUB', 'UAH', 'PLN'];
-    var data = await ApiCurrencyService.getCurrencyRates(value);
-    for (var item in data) {
-      listAllCurrency.add(CurrencyRate.fromMap(item));
+    try {
+      List<CurrencyRate> listAllCurrency = [];
+      List<String> listRequiredCurrency = ['USD', 'EUR', 'RUB', 'UAH', 'PLN'];
+      var data = await ApiCurrencyService.getCurrencyRates(value);
+      if (data == null) {
+        return <CurrencyRate>[];
+      }
+      for (var item in data) {
+        listAllCurrency.add(CurrencyRate.fromMap(item));
+      }
+      List<CurrencyRate> newList = listAllCurrency
+          .where((item) => listRequiredCurrency.contains(item.curAbbreviation))
+          .toList();
+      return newList;
+    } catch (e) {
+      throw Exception('Get currency failed: $e');
     }
-    List<CurrencyRate> newList = listAllCurrency
-        .where((item) => listRequiredCurrency.contains(item.curAbbreviation))
-        .toList();
-    return newList;
   }
 }

@@ -20,15 +20,19 @@ class _UsersListPageWidgetState extends State<UsersListPageWidget> {
   }
 
   Future getUsersList() async {
-    setState(() {
-      _isLoading = true;
-    });
+    try {
+      setState(() {
+        _isLoading = true;
+      });
 
-    var usersDb = await MongoDatabase.getUsers();
-    setState(() {
-      users = usersDb;
-      _isLoading = false;
-    });
+      var usersDb = await MongoDatabase.getUsers();
+      setState(() {
+        users = usersDb;
+        _isLoading = false;
+      });
+    } catch (e) {
+      throw Exception('Request to Mongodb failed: $e');
+    }
   }
 
   @override

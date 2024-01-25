@@ -28,8 +28,7 @@ class _BurgerMenuState extends State<BurgerMenu> {
       final encodedStr = user.imageSrc;
       Uint8List bytes = base64.decode(encodedStr);
       String dir = (await getApplicationDocumentsDirectory()).path;
-      File file = File(
-          "$dir/" + DateTime.now().millisecondsSinceEpoch.toString() + ".jpg");
+      File file = File("$dir/${DateTime.now().millisecondsSinceEpoch}.jpg");
       await file.writeAsBytes(bytes);
       return file;
     }
@@ -49,7 +48,7 @@ class _BurgerMenuState extends State<BurgerMenu> {
         _imageFile = imagePermanent;
       });
     } catch (e) {
-      print('Error loading image file: $e');
+      throw Exception('Error loading image file: $e');
     }
   }
 
@@ -73,7 +72,6 @@ class _BurgerMenuState extends State<BurgerMenu> {
       final image = await ImagePicker().pickImage(source: source);
       if (image == null) return;
 
-      // final imagePath = File(image.path);
       final Uint8List imageBytes = await image.readAsBytes();
       String base64Image = base64Encode(imageBytes);
 
@@ -86,7 +84,7 @@ class _BurgerMenuState extends State<BurgerMenu> {
         _imageFile = imagePermanent;
       });
     } on PlatformException catch (e) {
-      print('Falied to pick image: $e');
+      throw Exception('Falied to pick image: $e');
     }
   }
 

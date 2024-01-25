@@ -11,12 +11,17 @@ class GalleryPageWidget extends StatefulWidget {
 
 class _GalleryPageWidgetState extends State<GalleryPageWidget> {
   Future getImages() async {
-    List images = [];
-    var data = await ApiService().getPhotos();
-    for (var item in data) {
-      images.add(item['urls']['small']);
+    try {
+      List images = [];
+      var data = await ApiService().getPhotos();
+      if (data == null) return [];
+      for (var item in data) {
+        images.add(item['urls']['small']);
+      }
+      return images;
+    } catch (e) {
+      throw e;
     }
-    return images;
   }
 
   @override
@@ -38,6 +43,10 @@ class _GalleryPageWidgetState extends State<GalleryPageWidget> {
                   return const Center(
                     child: Text('Error'),
                   );
+                }
+
+                if (snapshot.data.isEmpty) {
+                  return const Center(child: Text("No images loaded"));
                 }
 
                 return ListView.builder(

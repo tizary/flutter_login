@@ -9,10 +9,10 @@ class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -89,6 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                           final form = _formKey.currentState!;
                           final email = _emailController.text;
                           final password = _passwordController.text;
+
                           if (form.validate()) {
                             try {
                               showDialog(
@@ -100,21 +101,22 @@ class _LoginPageState extends State<LoginPage> {
                                   );
                                 },
                               );
-
                               final user = await MongoDatabase.loginUser(
                                   email, password);
-                              AppState.userID = user['_id'].toString();
-                              AppState.userStore = User.fromMap(user);
-                              Navigator.pushNamed(context, 'user');
-                              setState(() {
-                                _loginError = false;
-                              });
+                              if (user != null) {
+                                AppState.userID = user['_id'].toString();
+                                AppState.userStore = User.fromMap(user);
+                                Navigator.pushNamed(context, 'user');
+                                setState(() {
+                                  _loginError = false;
+                                });
+                              }
                             } catch (e) {
                               Navigator.pop(context);
-                              print(e);
                               setState(() {
                                 _loginError = true;
                               });
+                              throw Exception('Login failed: $e');
                             }
                           }
                         },

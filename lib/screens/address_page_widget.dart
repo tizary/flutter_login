@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/header.dart';
+import 'package:flutter_application_1/utils/network_util.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_google_maps_webservices/places.dart';
 
@@ -30,7 +31,6 @@ class _AddressPageWidgetState extends State<AddressPageWidget> {
 
     final places = GoogleMapsPlaces(apiKey: apiKey);
     var response = await places.searchByText("London");
-    print(response.results);
     if (response.results.isNotEmpty) {
       var result = response.results.first;
       moveToLocation(
@@ -38,42 +38,51 @@ class _AddressPageWidgetState extends State<AddressPageWidget> {
     }
   }
 
+  checkInternet() async {
+    return await NetworkUtil.hasConnection();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const Header(pageTitle: 'Address'),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: TextFormField(
-                    controller: _searchController,
-                    textCapitalization: TextCapitalization.words,
-                    decoration: const InputDecoration(
-                      hintText: 'Search',
+    return (checkInternet() == false)
+        ? Scaffold(
+            appBar: const Header(pageTitle: 'Address'),
+            body: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: TextFormField(
+                          controller: _searchController,
+                          textCapitalization: TextCapitalization.words,
+                          decoration: const InputDecoration(
+                            hintText: 'Search',
+                          ),
+                          onChanged: (value) => findLocation(value),
+                        ),
+                      ),
                     ),
-                    onChanged: (value) => findLocation(value),
-                  ),
+                    IconButton(
+                        onPressed: () {
+                          findLocation(_searchController.text);
+                        },
+                        icon: const Icon(Icons.search))
+                  ],
                 ),
-              ),
-              IconButton(
-                  onPressed: () {
-                    findLocation(_searchController.text);
-                  },
-                  icon: const Icon(Icons.search))
-            ],
-          ),
-          Expanded(
-            child: GoogleMap(
-                onMapCreated: _onMapCreated,
-                initialCameraPosition:
-                    const CameraPosition(target: currentLocation, zoom: 12.0)),
-          ),
-        ],
-      ),
-    );
+                Expanded(
+                  child: GoogleMap(
+                      onMapCreated: _onMapCreated,
+                      initialCameraPosition: const CameraPosition(
+                          target: currentLocation, zoom: 12.0)),
+                ),
+              ],
+            ),
+          )
+        : const Scaffold(
+            appBar: Header(pageTitle: 'Address'),
+            body: Center(child: Text('Map cannot be loaded without internet')),
+          );
   }
 }

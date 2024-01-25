@@ -28,6 +28,9 @@ class _UserPageState extends State<UserPage> {
       drawer: const BurgerMenu(),
       body: widgets[_currentWidget],
       bottomNavigationBar: BottomNavigationBar(
+        fixedColor: Colors.white,
+        unselectedItemColor: Colors.white60,
+        backgroundColor: Colors.blue,
         currentIndex: _currentWidget,
         onTap: (int newIndex) {
           setState(() {
