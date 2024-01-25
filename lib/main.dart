@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'app.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+import 'dependency_injection.dart';
 import 'server/mongodb.dart';
 
 Future<void> main() async {
@@ -16,9 +17,9 @@ Future<void> main() async {
     appRunner: () async {
       WidgetsFlutterBinding
           .ensureInitialized(); // Обязательно для инициализации FlutterBinding перед использованием асинхронного кода
-
       await MongoDatabase.connect();
       runApp(const App());
+      DependencyInjection.init();
     },
   );
 
