@@ -160,7 +160,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                       return;
                                     }
                                     if (result != false) {
-                                      Navigator.pushNamed(context, 'login');
+                                      if (context.mounted) {
+                                        Navigator.pushNamed(context, 'login');
+                                      }
                                       resetFields();
                                       setState(() {
                                         _registerError = false;

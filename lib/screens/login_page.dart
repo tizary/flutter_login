@@ -106,13 +106,17 @@ class LoginPageState extends State<LoginPage> {
                               if (user != null) {
                                 AppState.userID = user['_id'].toString();
                                 AppState.userStore = User.fromMap(user);
-                                Navigator.pushNamed(context, 'user');
+                                if (context.mounted) {
+                                  Navigator.pushNamed(context, 'user');
+                                }
                                 setState(() {
                                   _loginError = false;
                                 });
                               }
                             } catch (e) {
-                              Navigator.pop(context);
+                              if (context.mounted) {
+                                Navigator.pop(context);
+                              }
                               setState(() {
                                 _loginError = true;
                               });

@@ -31,6 +31,7 @@ dependencies:
   get: ^4.6.6
   sentry_flutter: ^7.15.0
   connection_notifier: ^2.0.1
+  path: ^1.9.0
 
 dev_dependencies:
   flutter_test:

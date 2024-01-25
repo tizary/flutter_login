@@ -323,19 +323,23 @@ class _ContactsInfoPageWidgetState extends State<ContactsInfoPageWidget> {
                                   var result = await addUser(userInfo.toJson());
                                   if (result == null) return;
                                   if (result == false) {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                      backgroundColor: Colors.red[400],
-                                      content: const Text(
-                                          "User with that email already exists!"),
-                                    ));
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        backgroundColor: Colors.red[400],
+                                        content: const Text(
+                                            "User with that email already exists!"),
+                                      ));
+                                    }
                                   } else {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                      backgroundColor: Colors.green[400],
-                                      content: const Text(
-                                          "User successfully added!"),
-                                    ));
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        backgroundColor: Colors.green[400],
+                                        content: const Text(
+                                            "User successfully added!"),
+                                      ));
+                                    }
                                   }
                                 }
                               },

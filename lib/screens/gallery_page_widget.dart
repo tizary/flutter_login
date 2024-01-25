@@ -20,7 +20,7 @@ class _GalleryPageWidgetState extends State<GalleryPageWidget> {
       }
       return images;
     } catch (e) {
-      throw e;
+      throw Exception('Image loading failed: $e');
     }
   }
 
