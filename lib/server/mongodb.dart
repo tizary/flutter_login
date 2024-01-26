@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter_application_1/utils/network_util.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'dart:typed_data';
@@ -25,7 +24,6 @@ class MongoDatabase {
 
       _db = await Db.create(connectionUrl);
       await _db.open();
-      log('Connected to MongoDB');
       usersCollection = _db.collection('users');
       infoUserCollection = _db.collection('info');
     } catch (e) {
@@ -52,7 +50,7 @@ class MongoDatabase {
 
   static getUsersFromInfoUsers(id) async {
     if (!await NetworkUtil.hasConnection()) {
-      return;
+      return <Map<String, Object?>>[];
     }
     await _checkConnection();
 

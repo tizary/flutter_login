@@ -120,7 +120,7 @@ class _ContactsInfoPageWidgetState extends State<ContactsInfoPageWidget> {
         _isLoading = false;
       });
     } catch (e) {
-      throw Exception('Error deleting user: $e');
+      throw Exception('Error get users: $e');
     }
   }
 
