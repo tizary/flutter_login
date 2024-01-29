@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/services.dart';
 import '../../routes/app_routes.dart';
 
 class MainUserPageWidget extends StatefulWidget {
@@ -13,6 +14,8 @@ class MainUserPageWidget extends StatefulWidget {
 
 class _MainUserPageWidgetState extends State<MainUserPageWidget> {
   bool isSwitch = false;
+  final player = AudioPlayer();
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -65,6 +68,9 @@ class _MainUserPageWidgetState extends State<MainUserPageWidget> {
                       setState(() {
                         isSwitch = value;
                       });
+                      if (value) {
+                        playSound();
+                      }
                     }),
               ),
             ],
@@ -72,6 +78,11 @@ class _MainUserPageWidgetState extends State<MainUserPageWidget> {
         )
       ],
     );
+  }
+
+  Future<void> playSound() async {
+    String soundPath = 'sounds/click.mp3';
+    await player.play(AssetSource(soundPath));
   }
 }
 
