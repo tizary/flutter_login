@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/services.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../routes/app_routes.dart';
 
 class MainUserPageWidget extends StatefulWidget {
@@ -75,7 +76,11 @@ class _MainUserPageWidgetState extends State<MainUserPageWidget> {
               ),
             ],
           ),
-        )
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        CarouselWidget(),
       ],
     );
   }
@@ -84,6 +89,71 @@ class _MainUserPageWidgetState extends State<MainUserPageWidget> {
     String soundPath = 'sounds/click.mp3';
     await player.play(AssetSource(soundPath));
   }
+}
+
+class CarouselWidget extends StatefulWidget {
+  const CarouselWidget({
+    super.key,
+  });
+
+  @override
+  State<CarouselWidget> createState() => _CarouselWidgetState();
+}
+
+class _CarouselWidgetState extends State<CarouselWidget> {
+  final urlImages = [
+    'https://html.com/wp-content/uploads/flamingo.webp',
+    'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w600/2023/09/instagram-image-size.jpg',
+    'https://media.istockphoto.com/id/1347665170/photo/london-at-sunset.webp?s=2048x2048&w=is&k=20&c=n1v98nBYKd5v4SsTLw8WGlgJ9yBqgN4w-VnKomUy7-M='
+  ];
+  final controller = CarouselController();
+  int activeIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CarouselSlider.builder(
+            carouselController: controller,
+            itemCount: urlImages.length,
+            itemBuilder: (context, index, realIndex) {
+              final urlImage = urlImages[index];
+
+              return buildImage(urlImage, index);
+            },
+            options: CarouselOptions(
+              height: 250,
+              onPageChanged: (index, reason) {
+                setState(() {
+                  activeIndex = index;
+                });
+              },
+            )),
+        const SizedBox(
+          height: 32,
+        ),
+        buildIndicator(),
+      ],
+    );
+  }
+
+  Widget buildImage(String urlImage, int index) => Container(
+        margin: const EdgeInsets.symmetric(horizontal: 12),
+        color: Colors.grey,
+        child: Image.network(
+          urlImage,
+          fit: BoxFit.cover,
+        ),
+      );
+
+  Widget buildIndicator() => AnimatedSmoothIndicator(
+        activeIndex: activeIndex,
+        count: urlImages.length,
+        onDotClicked: animateToSlide,
+      );
+
+  void animateToSlide(int index) => controller.animateToPage(index);
 }
 
 class ListOfTilesWidget extends StatelessWidget {
