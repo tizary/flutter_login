@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/burger_menu.dart';
 import 'package:flutter_application_1/components/header.dart';
 
+import 'issues_page_widget.dart';
 import 'user_page_widgets/exchange_rates_widget.dart';
 import 'user_page_widgets/main_user_page_widget.dart';
 
@@ -16,7 +17,7 @@ class _UserPageState extends State<UserPage> {
   int _currentWidget = 0;
   List<Widget> widgets = const [
     MainUserPageWidget(),
-    Center(child: Icon(Icons.business)),
+    IssuesPageWidget(),
     ExchangeRatesWidget(),
   ];
 
@@ -43,8 +44,8 @@ class _UserPageState extends State<UserPage> {
             label: 'Main',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Business',
+            icon: Icon(Icons.electric_bolt),
+            label: 'Issues',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.currency_exchange_outlined),
