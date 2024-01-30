@@ -80,7 +80,7 @@ class _MainUserPageWidgetState extends State<MainUserPageWidget> {
         const SizedBox(
           height: 16,
         ),
-        CarouselWidget(),
+        const CarouselWidget(),
       ],
     );
   }
@@ -102,9 +102,9 @@ class CarouselWidget extends StatefulWidget {
 
 class _CarouselWidgetState extends State<CarouselWidget> {
   final urlImages = [
-    'https://html.com/wp-content/uploads/flamingo.webp',
-    'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w600/2023/09/instagram-image-size.jpg',
-    'https://media.istockphoto.com/id/1347665170/photo/london-at-sunset.webp?s=2048x2048&w=is&k=20&c=n1v98nBYKd5v4SsTLw8WGlgJ9yBqgN4w-VnKomUy7-M='
+    'assets/images/city.jpg',
+    'assets/images/flamingo.jpg',
+    'assets/images/mountain.jpg',
   ];
   final controller = CarouselController();
   int activeIndex = 0;
@@ -115,21 +115,22 @@ class _CarouselWidgetState extends State<CarouselWidget> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CarouselSlider.builder(
-            carouselController: controller,
-            itemCount: urlImages.length,
-            itemBuilder: (context, index, realIndex) {
-              final urlImage = urlImages[index];
+          carouselController: controller,
+          itemCount: urlImages.length,
+          itemBuilder: (context, index, realIndex) {
+            final urlImage = urlImages[index];
 
-              return buildImage(urlImage, index);
+            return buildImage(urlImage, index);
+          },
+          options: CarouselOptions(
+            height: 250,
+            onPageChanged: (index, reason) {
+              setState(() {
+                activeIndex = index;
+              });
             },
-            options: CarouselOptions(
-              height: 250,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  activeIndex = index;
-                });
-              },
-            )),
+          ),
+        ),
         const SizedBox(
           height: 32,
         ),
@@ -138,14 +139,16 @@ class _CarouselWidgetState extends State<CarouselWidget> {
     );
   }
 
-  Widget buildImage(String urlImage, int index) => Container(
-        margin: const EdgeInsets.symmetric(horizontal: 12),
-        color: Colors.grey,
-        child: Image.network(
-          urlImage,
-          fit: BoxFit.cover,
-        ),
-      );
+  Widget buildImage(String urlImage, int index) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12),
+      color: Colors.grey,
+      child: Image.asset(
+        urlImage,
+        fit: BoxFit.cover,
+      ),
+    );
+  }
 
   Widget buildIndicator() => AnimatedSmoothIndicator(
         activeIndex: activeIndex,
