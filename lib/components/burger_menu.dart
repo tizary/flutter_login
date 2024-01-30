@@ -3,14 +3,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_1/routes/app_routes.dart';
-import 'package:flutter_application_1/state/app_state.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
 import '../models/user.dart';
+import '../routes/app_routes.dart';
 import '../server/mongodb.dart';
+import '../state/app_state.dart';
 
 class BurgerMenu extends StatefulWidget {
   const BurgerMenu({super.key});

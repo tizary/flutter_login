@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/components/header.dart';
 import 'package:fast_contacts/fast_contacts.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import '../components/header.dart';
 
 class PhoneContactsPageWidget extends StatefulWidget {
   const PhoneContactsPageWidget({super.key});

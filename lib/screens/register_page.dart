@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/server/mongodb.dart';
-import 'package:flutter_application_1/components/header.dart';
-
+import '../components/header.dart';
 import '../models/user.dart';
+import '../server/mongodb.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

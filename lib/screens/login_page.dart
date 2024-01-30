@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/server/mongodb.dart';
-import 'package:flutter_application_1/components/header.dart';
-import 'package:flutter_application_1/state/app_state.dart';
-
+import '../components/header.dart';
 import '../models/user.dart';
+import '../server/mongodb.dart';
+import '../state/app_state.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

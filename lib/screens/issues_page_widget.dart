@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/issues.dart';
-import 'package:flutter_application_1/server/api_sentry_issues.dart';
+import '../models/issues.dart';
+import '../server/api_sentry_issues.dart';
 
 class IssuesPageWidget extends StatefulWidget {
   const IssuesPageWidget({super.key});

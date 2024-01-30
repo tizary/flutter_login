@@ -1,8 +1,9 @@
 import 'dart:async';
-import 'package:flutter_application_1/utils/network_util.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'dart:typed_data';
 import 'dart:convert';
+
+import '../utils/network_util.dart';
 
 String convertImageToBase64(Uint8List image) {
   return base64Encode(image);

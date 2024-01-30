@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/currency.dart';
-import 'package:flutter_application_1/server/api_currency_service.dart';
 import 'package:intl/intl.dart';
+
+import '../../models/currency.dart';
+import '../../server/api_currency_service.dart';
 
 class ExchangeRatesWidget extends StatefulWidget {
   const ExchangeRatesWidget({super.key});

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/components/modal_contacts_delete.dart';
-import 'package:flutter_application_1/models/user_info.dart';
-import 'package:flutter_application_1/components/header.dart';
-import 'package:flutter_application_1/state/app_state.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import '../components/header.dart';
+import '../components/modal_contacts_delete.dart';
+import '../models/user_info.dart';
 import '../server/mongodb.dart';
+import '../state/app_state.dart';
 
 class ContactsInfoPageWidget extends StatefulWidget {
   const ContactsInfoPageWidget({super.key});

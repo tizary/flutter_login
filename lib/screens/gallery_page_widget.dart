@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/components/header.dart';
-import 'package:flutter_application_1/server/api_service.dart';
+import '../components/header.dart';
+import '../server/api_service.dart';
 
 class GalleryPageWidget extends StatefulWidget {
   const GalleryPageWidget({super.key});

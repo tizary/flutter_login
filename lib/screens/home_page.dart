@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/components/header.dart';
+import '../components/header.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -9,8 +9,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/components/burger_menu.dart';
-import 'package:flutter_application_1/components/header.dart';
-
+import '../components/burger_menu.dart';
+import '../components/header.dart';
 import 'issues_page_widget.dart';
 import 'user_page_widgets/exchange_rates_widget.dart';
 import 'user_page_widgets/main_user_page_widget.dart';
