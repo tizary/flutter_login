@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../components/header.dart';
 import '../models/user.dart';
 import '../server/mongodb.dart';
+import '../utils/network_util.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -25,6 +26,24 @@ class _RegisterPageState extends State<RegisterPage> {
     _passwordController.clear();
     _repeatPasswordController.clear();
     _userNameController.clear();
+  }
+
+  Future<void> _showModal() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Warning'),
+            content: const Text('No internet connection'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK')),
+            ],
+          );
+        });
   }
 
   @override
@@ -143,6 +162,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                 final userName = _userNameController.text;
 
                                 if (password == repeatPassword) {
+                                  var isInternet =
+                                      await NetworkUtil.hasConnection();
+                                  if (!isInternet) {
+                                    _showModal();
+                                    return;
+                                  }
+
                                   User user = User(
                                       email: email,
                                       userName: userName,
