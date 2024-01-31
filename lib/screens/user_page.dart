@@ -13,7 +13,11 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
+  final _controller = PageController(
+    initialPage: 0,
+  );
   int _currentWidget = 0;
+
   List<Widget> widgets = const [
     MainUserPageWidget(),
     IssuesPageWidget(),
@@ -21,12 +25,31 @@ class _UserPageState extends State<UserPage> {
   ];
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: const Header(pageTitle: 'User'),
       drawer: const BurgerMenu(),
-      body: widgets[_currentWidget],
+      // body: widgets[_currentWidget],
+      body: PageView(
+        controller: _controller,
+        children: const [
+          MainUserPageWidget(),
+          IssuesPageWidget(),
+          ExchangeRatesWidget(),
+        ],
+        onPageChanged: (value) {
+          setState(() {
+            _currentWidget = value;
+          });
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         fixedColor: Colors.white,
         unselectedItemColor: Colors.white60,
