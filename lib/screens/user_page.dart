@@ -13,10 +13,9 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  final _controller = PageController(
-    initialPage: 0,
-  );
+  final _controller = PageController();
   int _currentWidget = 0;
+  int _currentBottomItem = 0;
 
   List<Widget> widgets = const [
     MainUserPageWidget(),
@@ -47,6 +46,7 @@ class _UserPageState extends State<UserPage> {
         onPageChanged: (value) {
           setState(() {
             _currentWidget = value;
+            _currentBottomItem = value;
           });
         },
       ),
@@ -54,10 +54,11 @@ class _UserPageState extends State<UserPage> {
         fixedColor: Colors.white,
         unselectedItemColor: Colors.white60,
         backgroundColor: Colors.blue,
-        currentIndex: _currentWidget,
+        currentIndex: _currentBottomItem,
         onTap: (int newIndex) {
           setState(() {
-            _currentWidget = newIndex;
+            _currentBottomItem = newIndex;
+            _controller.jumpToPage(newIndex);
           });
         },
         items: const <BottomNavigationBarItem>[
